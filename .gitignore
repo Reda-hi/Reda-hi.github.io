@@ -1,0 +1,22 @@
+# Recycle It - Git & Environment Configuration
+
+## Environment Variables
+node_modules/
+__pycache__/
+*.pyc
+.DS_Store
+.env
+.env.local
+.env.*.local
+*.log
+
+## IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+## OS
+Thumbs.db
+.DS_Store
