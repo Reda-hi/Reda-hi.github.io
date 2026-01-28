@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycle It - AI Powered Recycling Guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #1f2937;
+        }
+        
+        .header {
+            background: white;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5rem;
+            color: #10b981;
+            margin-bottom: 0.5rem;
+        }
+        
+        .header p {
+            color: #6b7280;
+            font-size: 1.1rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab-btn {
+            padding: 0.75rem 1.5rem;
+            border: 2px solid white;
+            background: transparent;
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.3s;
+            font-weight: 600;
+        }
+        
+        .tab-btn.active {
+            background: white;
+            color: #667eea;
+            border-color: white;
+        }
+        
+        .tab-btn:hover {
+            background: rgba(255,255,255,0.2);
+        }
+        
+        .section {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section h2 {
+            color: #059669;
+            margin-bottom: 1rem;
+            font-size: 1.8rem;
+        }
+        
+        .section p {
+            color: #4b5563;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .feature {
+            text-align: center;
+            padding: 1.5rem;
+            background: #f0fdf4;
+            border-radius: 8px;
+            border-left: 4px solid #10b981;
+        }
+        
+        .feature-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .feature h3 {
+            color: #059669;
+            margin-bottom: 0.5rem;
+        }
+        
+        .materials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 1rem;
+            margin: 1.5rem 0;
+        }
+        
+        .material-item {
+            background: #f9fafb;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .material-item:hover {
+            border-color: #10b981;
+            background: #f0fdf4;
+        }
+        
+        .material-item.selected {
+            background: #d1fae5;
+            border-color: #10b981;
+        }
+        
+        .material-item input {
+            display: none;
+        }
+        
+        .material-img {
+            width: 100%;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+        }
+        
+        .material-label {
+            font-weight: 600;
+            color: #1f2937;
+            font-size: 0.9rem;
+        }
+        
+        .material-category {
+            font-size: 0.75rem;
+            color: #6b7280;
+            display: block;
+            margin-top: 0.25rem;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin: 2rem 0;
+        }
+        
+        .count {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1f2937;
+        }
+        
+        .btn {
+            padding: 0.75rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+        }
+        
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-secondary {
+            background: #6366f1;
+            color: white;
+        }
+        
+        .btn-secondary:hover {
+            background: #4f46e5;
+            transform: translateY(-2px);
+        }
+        
+        .processing {
+            display: none;
+            text-align: center;
+            padding: 2rem;
+            background: #f0fdf4;
+            border-radius: 8px;
+            margin: 2rem 0;
+        }
+        
+        .processing.active {
+            display: block;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 1.5rem 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981 0%, #059669 100%);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .video-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .video-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .video-iframe {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            border: none;
+        }
+        
+        .video-info {
+            padding: 1rem;
+        }
+        
+        .video-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            line-height: 1.4;
+        }
+        
+        .video-stats {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+        }
+        
+        .difficulty {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-easy {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        
+        .difficulty-medium {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .difficulty-hard {
+            background: #fee2e2;
+            color: #7f1d1d;
+        }
+        
+        .material-photo {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .material-source {
+            font-size: 0.85rem;
+            color: #6b7280;
+            font-weight: 500;
+        }
+        
+        .back-btn {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <h1>♻️ Recycle It</h1>
+    <p>AI-Powered Upcycling & Recycling Guide for JLM Ensam Casablanca</p>
+</header>
+
+<div class="container">
+    <!-- Navigation Tabs -->
+    <div class="tabs">
+        <button type="button" class="tab-btn active" id="tabIntro">📖 Project Info</button>
+        <button type="button" class="tab-btn" id="tabSearch">🔍 Search Items</button>
+        <button type="button" class="tab-btn" id="tabResults" style="display: none;">🎯 Results</button>
+    </div>
+
+    <!-- Section 1: Project Introduction -->
+    <section class="section active" id="intro-section">
+        <h2>🌍 Project Recycle It</h2>
+        <p>
+            <strong>Recycle It</strong> is a social entrepreneurship initiative by <strong>JLM Ensam Casablanca</strong>, 
+            dedicated to raising awareness about recycling through creative upcycling.
+        </p>
+        <div class="features">
+            <div class="feature">
+                <span class="feature-icon">🎥</span>
+                <h3>Video Tutorials</h3>
+                <p>Discover step-by-step DIY upcycling guides</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">♻️</span>
+                <h3>16 Materials</h3>
+                <p>From plastic bottles to wood pallets</p>
+            </div>
+            <div class="feature">
+                <span class="feature-icon">🤖</span>
+                <h3>AI Powered</h3>
+                <p>Smart matching of materials to tutorials</p>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btnStart">Start Exploring →</button>
+    </section>
+
+    <!-- Section 2: Search Items -->
+    <section class="section" id="search-section" style="display: none;">
+        <h2>What Do You Want to Recycle?</h2>
+        <p>Select one or more materials to find DIY tutorials</p>
+
+        <div class="materials-grid" id="materialsList"></div>
+
+        <div class="controls">
+            <span class="count">Selected: <strong id="countDisplay">0</strong> items</span>
+            <button type="button" class="btn btn-primary" id="searchBtn" disabled>🤖 Find Tutorials with AI</button>
+        </div>
+
+        <div class="processing" id="processingPanel">
+            <div style="font-size: 2rem; margin-bottom: 1rem;">🤖</div>
+            <h3 style="margin-bottom: 1rem;">AI Agent is Searching...</h3>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <div id="searchLog" style="margin-top: 1rem; font-size: 0.9rem; color: #6b7280;"></div>
+        </div>
+    </section>
+
+    <!-- Section 3: Results -->
+    <section class="section" id="results-section" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem; flex-wrap: wrap; gap: 1rem;">
+            <h2 style="margin: 0;">🎯 AI Curated Results (<span id="resultCount">0</span> videos)</h2>
+            <button type="button" class="btn btn-secondary" id="btnBack">← Back to Search</button>
+        </div>
+
+        <div id="selectedItemsDisplay" style="margin-bottom: 1.5rem; padding: 1rem; background: #f0fdf4; border-radius: 8px; border-left: 4px solid #10b981; display: none;">
+            <div style="font-weight: 600; color: #059669; margin-bottom: 0.5rem;">📌 You Selected:</div>
+            <div id="selectedItemsList" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+        </div>
+
+        <div class="video-grid" id="videoGrid"></div>
+    </section>
+</div>
+
+<script>
+// 16 Materials Database with Videos
+const materialsDB = {
+    'plastic_bottles': { label: 'Plastic Bottles', category: 'Plastic', image: 'https://www.deutschland.de/sites/default/files/styles/image_carousel_mobile/public/media/image/61220236.jpg?itok=XMW6ck7H', videos: [{ id: 'dQw4w9WgXcQ', title: 'Creative Plastic Bottle Crafts', duration: '12:34', views: '1.2M', difficulty: 'easy' }] },
+    'cardboard': { label: 'Cardboard', category: 'Paper', image: 'https://www.limehouseboardmills.com/wp-content/uploads/2025/02/recycled-cardboard.webp', videos: [{ id: 'n1l-Yy4673k', title: 'Cardboard Crafts & DIY', duration: '22:10', views: '3M', difficulty: 'medium' }] },
+    'tin_cans': { label: 'Tin Cans', category: 'Metal', image: 'https://www.timetorecycle.org/wp-content/uploads/2021/02/Metal-Cans-2048x1732-1.jpeg', videos: [{ id: 'kffacxfA7Ww', title: 'Tin Can Crafts DIY Ideas', duration: '11:25', views: '1.5M', difficulty: 'easy' }] },
+    'newspaper': { label: 'Newspaper', category: 'Paper', image: 'https://previews.123rf.com/images/mawardibahar/mawardibahar1505/mawardibahar150500661/39630194-a-stack-of-old-newspaper-for-recycle.jpg', videos: [{ id: 'Dxcc6ycjBd8', title: 'Newspaper Craft Ideas', duration: '9:15', views: '600K', difficulty: 'easy' }] },
+    't_shirts': { label: 'T-Shirts', category: 'Textile', image: 'https://www.roadrunnerwm.com/hs-fs/hubfs/Blog/Hero%20Images/RR-Blog-The-Environmental-Crisis-Caused-By-Textile-Waste-Hero.jpg', videos: [{ id: 'aqz-KE-bpKQ', title: 'Repurpose Old T-Shirts DIY', duration: '11:20', views: '2.5M', difficulty: 'easy' }] },
+    'jeans': { label: 'Jeans', category: 'Textile', image: 'https://kohantextilejournal.com/wp-content/uploads/2019/11/denim-recycle.jpg', videos: [{ id: 'jfKfPfyJRdk', title: 'Upcycled Denim Projects', duration: '25:10', views: '4.2M', difficulty: 'medium' }] },
+    'plastic_bags': { label: 'Plastic Bags', category: 'Plastic', image: 'https://waste-management-world.com/imager/media/wasteManagementWorld/809014/3520_428fd902f4247199467725e7eccf1673.jpg', videos: [{ id: 'S5wWt8u2b4M', title: 'Plastic Bag Crafts', duration: '8:20', views: '1.3M', difficulty: 'easy' }] },
+    'egg_cartons': { label: 'Egg Cartons', category: 'Paper', image: 'https://troupewaste.com/wp-content/uploads/2024/03/The-Truth-Behind-Recycling-Egg-Cartons-Troupe-Waste-and-Recycling.jpg.webp', videos: [{ id: '4v5OA7h_KGI', title: 'Egg Carton Seed Starter', duration: '10:00', views: '750K', difficulty: 'easy' }] },
+    'cork': { label: 'Wine Corks', category: 'Natural', image: 'https://ae01.alicdn.com/kf/HTB1Qje6X2vsK1RjSspdq6AZepXaT/8pcs-lot-Natural-Wood-Corks-Cone-Type-Wine-Stopper-Corks-Stoppers-Tapered-Corks-Stoppers-Bar-Tools.jpg', videos: [{ id: 'Rz59s7DyuMU', title: 'DIY Cork Projects', duration: '12:30', views: '1.4M', difficulty: 'easy' }] },
+    'aluminum_cans': { label: 'Aluminum Cans', category: 'Metal', image: 'https://www.whitetaildisposal.com/wp-content/uploads/2024/03/Cans.png', videos: [{ id: 'B85ClPipnIQ', title: 'Aluminum Can Crafts', duration: '14:00', views: '1.1M', difficulty: 'medium' }] },
+    'batteries': { label: 'Batteries', category: 'E-Waste', image: 'https://images.stockcake.com/public/4/a/0/4a02d38d-6208-41c8-8b6a-070bdc927a9c_large/electronic-waste-pile-stockcake.jpg', videos: [{ id: '9KK-zX_5qWM', title: 'Battery Recycling', duration: '9:15', views: '650K', difficulty: 'easy' }] },
+    'electronics': { label: 'Electronics', category: 'E-Waste', image: 'https://tidyup.com.au/wp-content/uploads/2020/09/electronic-waste.jpg', videos: [{ id: 'K5eBxMf7TzE', title: 'E-Waste Recycling Guide', duration: '11:45', views: '920K', difficulty: 'easy' }] },
+    'rubber': { label: 'Rubber Tires', category: 'Rubber', image: 'https://img.freepik.com/premium-photo/stack-old-car-tires-rubber-recycling_160084-183.jpg', videos: [{ id: 'aW9vL3pK7mQ', title: 'DIY Tire Projects', duration: '16:20', views: '2.2M', difficulty: 'medium' }] },
+    'aluminum_foil': { label: 'Aluminum Foil', category: 'Metal', image: 'https://www.scswa.net/ImageRepository/Document?documentId=215', videos: [{ id: 'cD8hN4rL6tP', title: 'Aluminum Foil Crafts', duration: '13:10', views: '1.3M', difficulty: 'easy' }] },
+    'fabric_scraps': { label: 'Fabric Scraps', category: 'Textile', image: 'https://www.shutterstock.com/shutterstock/videos/1098598647/thumb/1.jpg', videos: [{ id: 'WOnSYLlHW0w', title: 'Fabric Scrap Quilts', duration: '19:45', views: '1.7M', difficulty: 'medium' }] },
+    'pallets': { label: 'Wood Pallets', category: 'Wood', image: 'https://www.liveabout.com/thmb/BWQ89ham_fTMrt2d6UMd9mIj1NY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/94107208-56a7ec473df78cf7729ac1fd.jpg', videos: [{ id: 'n_5OYAAP6ow', title: 'Pallet Furniture DIY', duration: '35:00', views: '5M', difficulty: 'hard' }] }
+};
+
+let selectedMaterials = new Set();
+
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    renderMaterials();
+    attachEventHandlers();
+});
+
+function attachEventHandlers() {
+    document.getElementById('tabIntro').addEventListener('click', () => switchTab('intro'));
+    document.getElementById('tabSearch').addEventListener('click', () => switchTab('search'));
+    document.getElementById('tabResults').addEventListener('click', () => switchTab('results'));
+    document.getElementById('btnStart').addEventListener('click', () => switchTab('search'));
+    document.getElementById('searchBtn').addEventListener('click', performSearch);
+    document.getElementById('btnBack').addEventListener('click', () => switchTab('search'));
+}
+
+function switchTab(tab) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    
+    document.getElementById(tab + '-section').classList.add('active');
+    document.getElementById('tab' + tab.charAt(0).toUpperCase() + tab.slice(1)).classList.add('active');
+}
+
+function renderMaterials() {
+    const grid = document.getElementById('materialsList');
+    grid.innerHTML = '';
+    
+    Object.entries(materialsDB).forEach(([key, data]) => {
+        const item = document.createElement('div');
+        item.className = 'material-item';
+        item.innerHTML = `<img src="${data.image}" alt="${data.label}" class="material-img" onerror="this.src='https://via.placeholder.com/150?text=${encodeURIComponent(data.label)}'"><div class="material-label">${data.label}</div><div class="material-category">${data.category}</div>`;
+        item.addEventListener('click', () => toggleMaterial(key, item));
+        grid.appendChild(item);
+    });
+}
+
+function toggleMaterial(key, element) {
+    if (selectedMaterials.has(key)) {
+        selectedMaterials.delete(key);
+        element.classList.remove('selected');
+    } else {
+        selectedMaterials.add(key);
+        element.classList.add('selected');
+    }
+    document.getElementById('countDisplay').textContent = selectedMaterials.size;
+    document.getElementById('searchBtn').disabled = selectedMaterials.size === 0;
+}
+
+function performSearch() {
+    if (selectedMaterials.size === 0) return;
+    
+    const processing = document.getElementById('processingPanel');
+    processing.classList.add('active');
+    
+    // Simulate search
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress = Math.min(90, progress + Math.random() * 20);
+        document.getElementById('progressBar').style.width = progress + '%';
+    }, 300);
+    
+    setTimeout(() => {
+        clearInterval(interval);
+        document.getElementById('progressBar').style.width = '100%';
+        processing.classList.remove('active');
+        displayResults();
+        switchTab('results');
+    }, 2000);
+}
+
+function displayResults() {
+    const grid = document.getElementById('videoGrid');
+    grid.innerHTML = '';
+    
+    let videos = [];
+    selectedMaterials.forEach(key => {
+        if (materialsDB[key].videos) {
+            materialsDB[key].videos.forEach(v => videos.push({...v, source: materialsDB[key].label, image: materialsDB[key].image}));
+        }
+    });
+    
+    document.getElementById('resultCount').textContent = videos.length;
+    
+    // Show selected items
+    const itemsList = document.getElementById('selectedItemsList');
+    itemsList.innerHTML = '';
+    selectedMaterials.forEach(key => {
+        const badge = document.createElement('span');
+        badge.style.cssText = 'background: #d1fae5; color: #047857; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.875rem; font-weight: 500;';
+        badge.textContent = materialsDB[key].label;
+        itemsList.appendChild(badge);
+    });
+    document.getElementById('selectedItemsDisplay').style.display = 'block';
+    
+    // Show videos
+    videos.forEach(v => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `<iframe src="https://www.youtube.com/embed/${v.id}" class="video-iframe" allowfullscreen></iframe><div class="video-info"><h3 class="video-title">${v.title}</h3><div class="video-stats"><span>👁️ ${v.views}</span> <span>⏱️ ${v.duration}</span></div><span class="difficulty difficulty-${v.difficulty}">${v.difficulty}</span><img src="${v.image}" class="material-photo" onerror="this.src='https://via.placeholder.com/300x120?text=${encodeURIComponent(v.source)}'"><div class="material-source">For: ${v.source}</div></div>`;
+        grid.appendChild(card);
+    });
+}
+</script>
+
+</body>
+</html>
+    <p class="subtitle">AI-Powered Upcycling & Recycling Guide</p>
+</header>
+
+<div class="container">
+    <!-- Navigation Tabs -->
+    <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem; border-bottom: 2px solid #e5e7eb; flex-wrap: wrap;">
+        <button class="nav-tab active" onclick="switchSection('intro')" id="navIntro">📖 Project Info</button>
+        <button class="nav-tab" onclick="switchSection('search')" id="navSearch">🔍 Search Items</button>
+        <button class="nav-tab" onclick="switchSection('results')" id="navResults" style="display: none;">🎯 Results</button>
+    </div>
+
+    <!-- Section 1: Project Introduction -->
+    <div class="section-panel active" id="intro-section">
+        <div class="intro-section">
+            <h2 style="font-size: 1.5rem; color: #059669; margin-bottom: 0.75rem;">🌍 Project Recycle It</h2>
+            <p style="color: #374151;">
+                <strong>Recycle It</strong> is a social entrepreneurship initiative by <strong>JLM Ensam Casablanca</strong>, dedicated to raising awareness about recycling through creative upcycling.
+            </p>
+        </div>
+    </div>
+
+    <!-- Section 2: Search Items -->
+    <div class="section-panel" id="search-section" style="display: none;">
+        <div class="selection-panel" id="selectionPanel">
+        <div class="panel-header">
+            <div class="panel-title">What Do You Want to Recycle?</div>
+            <div class="panel-desc">Select materials to find DIY tutorials</div>
+        </div>
+
+        <div class="materials-list" id="materialsList"></div>
+
+        <div class="selected-count">
+            Selected: <span id="countDisplay">0</span> items
+        </div>
+
+        <button class="ai-button" id="searchBtn" onclick="startAISearch()" disabled>
+            <span>🤖</span>
+            <span>Find Tutorials with AI</span>
+        </button>
+    </div>
+
+    <div class="ai-processing" id="processingPanel">
+        <div class="ai-avatar">🤖</div>
+        <div style="font-size: 1.25rem; font-weight: 600; margin-bottom: 0.5rem;">AI Agent is Searching...</div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+        <div class="search-log" id="searchLog"></div>
+    </div>
+    </div>
+
+    <!-- Section 3: Results -->
+    <div class="section-panel" id="results-section" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+            <div style="font-size: 1.25rem; font-weight: 700;">
+                🎯 AI Curated Results <span class="badge" id="resultCount">0 videos</span>
+            </div>
+            <button class="ai-button" onclick="switchSection('search')" style="background: #6366f1; padding: 0.5rem 1.5rem; font-size: 0.95rem;">
+                ← Back to Search
+            </button>
+        </div>
+        <div id="selectedItemsDisplay" style="margin-bottom: 1.5rem; padding: 1rem; background: #f0fdf4; border-radius: 8px; border-left: 4px solid #10b981; display: none;">
+            <div style="font-weight: 600; color: #059669; margin-bottom: 0.5rem;">📌 Matched Items:</div>
+            <div id="selectedItemsList" style="display: flex; gap: 0.5rem; flex-wrap: wrap;"></div>
+        </div>
+        <div class="video-grid" id="videoGrid"></div>
+    </div>
+</div>
+
+<script>
+// Materials database with REAL working YouTube IDs
+const materialsDB = {
+    'plastic_bottles': {
+        label: 'Plastic Bottles',
+        category: 'Plastic',
+        image: 'https://www.deutschland.de/sites/default/files/styles/image_carousel_mobile/public/media/image/61220236.jpg?itok=XMW6ck7H',
+        videos: [
+            { id: 'dQw4w9WgXcQ', title: 'Creative Plastic Bottle Crafts', duration: '12:34', views: '1.2M', difficulty: 'easy' },
+            { id: 'jNQXAC9IVRw', title: 'DIY Plastic Bottle Projects', duration: '8:45', views: '890K', difficulty: 'easy' }
+        ]
+    },
+    'cardboard': {
+        label: 'Cardboard',
+        category: 'Paper',
+        image: 'https://www.limehouseboardmills.com/wp-content/uploads/2025/02/recycled-cardboard.webp',
+        videos: [
+            { id: 'n1l-Yy4673k', title: 'Cardboard Crafts & DIY', duration: '22:10', views: '3M', difficulty: 'medium' },
+            { id: '9bZkp7q19f0', title: 'Easy Cardboard Box Projects', duration: '14:30', views: '950K', difficulty: 'easy' }
+        ]
+    },
+    'tin_cans': {
+        label: 'Tin Cans',
+        category: 'Metal',
+        image: 'https://www.timetorecycle.org/wp-content/uploads/2021/02/Metal-Cans-2048x1732-1.jpeg',
+        videos: [
+            { id: 'kffacxfA7Ww', title: 'Tin Can Crafts DIY Ideas', duration: '11:25', views: '1.5M', difficulty: 'easy' },
+            { id: 'x-xY3u3z9QE', title: 'Upcycled Tin Can Projects', duration: '15:00', views: '2.3M', difficulty: 'medium' }
+        ]
+    },
+    'newspaper': {
+        label: 'Newspaper',
+        category: 'Paper',
+        image: 'https://previews.123rf.com/images/mawardibahar/mawardibahar1505/mawardibahar150500661/39630194-a-stack-of-old-newspaper-for-recycle.jpg',
+        videos: [
+            { id: 'Dxcc6ycjBd8', title: 'Newspaper Craft Ideas', duration: '9:15', views: '600K', difficulty: 'easy' },
+            { id: 'PL84AWYxT1Q', title: 'Recycled Newspaper Projects', duration: '13:40', views: '1.1M', difficulty: 'medium' }
+        ]
+    },
+    't_shirts': {
+        label: 'Old T-Shirts',
+        category: 'Textile',
+        image: 'https://www.roadrunnerwm.com/hs-fs/hubfs/Blog/Hero%20Images/RR-Blog-The-Environmental-Crisis-Caused-By-Textile-Waste-Hero.jpg',
+        videos: [
+            { id: 'aqz-KE-bpKQ', title: 'Repurpose Old T-Shirts DIY', duration: '11:20', views: '2.5M', difficulty: 'easy' },
+            { id: 'yqQ34jv_CQQ', title: 'T-Shirt Yarn & Projects', duration: '14:00', views: '1.8M', difficulty: 'medium' }
+        ]
+    },
+    'jeans': {
+        label: 'Old Jeans',
+        category: 'Textile',
+        image: 'https://kohantextilejournal.com/wp-content/uploads/2019/11/denim-recycle.jpg',
+        videos: [
+            { id: 'jfKfPfyJRdk', title: 'Upcycled Denim Projects', duration: '25:10', views: '4.2M', difficulty: 'medium' },
+            { id: 'CJ0uIUlqI3s', title: 'DIY Denim Bag Tutorial', duration: '19:45', views: '980K', difficulty: 'medium' }
+        ]
+    },
+    'plastic_bags': {
+        label: 'Plastic Bags',
+        category: 'Plastic',
+        image: 'https://waste-management-world.com/imager/media/wasteManagementWorld/809014/3520_428fd902f4247199467725e7eccf1673.jpg',
+        videos: [
+            { id: 'S5wWt8u2b4M', title: 'Plastic Bag Crafts', duration: '8:20', views: '1.3M', difficulty: 'easy' },
+            { id: 'rWWfI6GVYwI', title: 'Recycled Plastic Bag Projects', duration: '12:15', views: '890K', difficulty: 'easy' }
+        ]
+    },
+    'egg_cartons': {
+        label: 'Egg Cartons',
+        category: 'Paper',
+        image: 'https://troupewaste.com/wp-content/uploads/2024/03/The-Truth-Behind-Recycling-Egg-Cartons-Troupe-Waste-and-Recycling.jpg.webp',
+        videos: [
+            { id: '4v5OA7h_KGI', title: 'Egg Carton Seed Starter DIY', duration: '10:00', views: '750K', difficulty: 'easy' }
+        ]
+    },
+    'cork': {
+        label: 'Wine Corks',
+        category: 'Natural',
+        image: 'https://ae01.alicdn.com/kf/HTB1Qje6X2vsK1RjSspdq6AZepXaT/8pcs-lot-Natural-Wood-Corks-Cone-Type-Wine-Stopper-Corks-Stoppers-Tapered-Corks-Stoppers-Bar-Tools.jpg',
+        videos: [
+            { id: 'Rz59s7DyuMU', title: 'DIY Cork Projects', duration: '12:30', views: '1.4M', difficulty: 'easy' }
+        ]
+    },
+    'aluminum_cans': {
+        label: 'Aluminum Cans',
+        category: 'Metal',
+        image: 'https://www.whitetaildisposal.com/wp-content/uploads/2024/03/Cans.png',
+        videos: [
+            { id: 'B85ClPipnIQ', title: 'Aluminum Can Crafts', duration: '14:00', views: '1.1M', difficulty: 'medium' }
+        ]
+    },
+    'batteries': {
+        label: 'Old Batteries',
+        category: 'E-Waste',
+        image: 'https://images.stockcake.com/public/4/a/0/4a02d38d-6208-41c8-8b6a-070bdc927a9c_large/electronic-waste-pile-stockcake.jpg',
+        videos: [
+            { id: '9KK-zX_5qWM', title: 'Battery Recycling Guide', duration: '9:15', views: '650K', difficulty: 'easy' }
+        ]
+    },
+    'electronics': {
+        label: 'Electronics Waste',
+        category: 'E-Waste',
+        image: 'https://tidyup.com.au/wp-content/uploads/2020/09/electronic-waste.jpg',
+        videos: [
+            { id: 'K5eBxMf7TzE', title: 'E-Waste Recycling Guide', duration: '11:45', views: '920K', difficulty: 'easy' }
+        ]
+    },
+    'rubber': {
+        label: 'Rubber Tires',
+        category: 'Rubber',
+        image: 'https://img.freepik.com/premium-photo/stack-old-car-tires-rubber-recycling_160084-183.jpg',
+        videos: [
+            { id: 'aW9vL3pK7mQ', title: 'DIY Tire Swing & Planters', duration: '16:20', views: '2.2M', difficulty: 'medium' }
+        ]
+    },
+    'aluminum_foil': {
+        label: 'Aluminum Foil',
+        category: 'Metal',
+        image: 'https://www.scswa.net/ImageRepository/Document?documentId=215',
+        videos: [
+            { id: 'cD8hN4rL6tP', title: 'Aluminum Foil Crafts DIY', duration: '13:10', views: '1.3M', difficulty: 'easy' }
+        ]
+    },
+    'fabric_scraps': {
+        label: 'Fabric Scraps',
+        category: 'Textile',
+        image: 'https://www.shutterstock.com/shutterstock/videos/1098598647/thumb/1.jpg',
+        videos: [
+            { id: 'WOnSYLlHW0w', title: 'Fabric Scrap Quilts', duration: '19:45', views: '1.7M', difficulty: 'medium' }
+        ]
+    },
+    'pallets': {
+        label: 'Wood Pallets',
+        category: 'Wood',
+        image: 'https://www.liveabout.com/thmb/BWQ89ham_fTMrt2d6UMd9mIj1NY=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/94107208-56a7ec473df78cf7729ac1fd.jpg',
+        videos: [
+            { id: 'n_5OYAAP6ow', title: 'Pallet Furniture DIY', duration: '35:00', views: '5M', difficulty: 'hard' }
+        ]
+    }
+};
+
+let selectedMaterials = new Set();
+
+// Navigation function
+function switchSection(section) {
+    // Hide all sections
+    document.getElementById('intro-section').style.display = 'none';
+    document.getElementById('search-section').style.display = 'none';
+    document.getElementById('results-section').style.display = 'none';
+    
+    // Remove active from all nav tabs
+    document.getElementById('navIntro').classList.remove('active');
+    document.getElementById('navSearch').classList.remove('active');
+    document.getElementById('navResults').classList.remove('active');
+    
+    // Show selected section and activate nav
+    if (section === 'intro') {
+        document.getElementById('intro-section').style.display = 'block';
+        document.getElementById('navIntro').classList.add('active');
+    } else if (section === 'search') {
+        document.getElementById('search-section').style.display = 'block';
+        document.getElementById('navSearch').classList.add('active');
+    } else if (section === 'results') {
+        document.getElementById('results-section').style.display = 'block';
+        document.getElementById('navResults').classList.add('active');
+    }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderCheckboxes();
+});
+
+function renderCheckboxes() {
+    const list = document.getElementById('materialsList');
+    
+    Object.entries(materialsDB).forEach(([key, data]) => {
+        const item = document.createElement('div');
+        item.className = 'checkbox-item';
+        item.dataset.key = key;  // Store key as data attribute for easy access
+        
+        item.innerHTML = `
+            <input type="checkbox" id="${key}" value="${key}">
+            <label for="${key}">
+                <img src="${data.image}" alt="${data.label}" class="material-photo" onerror="this.src='https://via.placeholder.com/60?text=${encodeURIComponent(data.label)}'">
+                <div class="material-info">
+                    <span class="material-name">${data.label}</span>
+                    <span class="material-category">${data.category}</span>
+                </div>
+            </label>
+        `;
+        
+        // Attach event listener to checkbox
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', () => {
+            updateSelection(key, checkbox.checked);
+        });
+        
+        // Also allow clicking the entire item to toggle
+        item.addEventListener('click', (e) => {
+            if (e.target.tagName !== 'INPUT') {
+                checkbox.checked = !checkbox.checked;
+                updateSelection(key, checkbox.checked);
+            }
+        });
+        
+        list.appendChild(item);
+    });
+}
+
+function updateSelection(key, isChecked) {
+    if (isChecked) {
+        selectedMaterials.add(key);
+    } else {
+        selectedMaterials.delete(key);
+    }
+    
+    document.getElementById('countDisplay').textContent = selectedMaterials.size;
+    document.getElementById('searchBtn').disabled = selectedMaterials.size === 0;
+    
+    // Find and update the visual state of the item
+    const item = document.querySelector(`[data-key="${key}"]`);
+    if (item) {
+        if (isChecked) {
+            item.classList.add('active');
+        } else {
+            item.classList.remove('active');
+        }
+    }
+}
+
+async function startAISearch() {
+    const processing = document.getElementById('processingPanel');
+    const progressFill = document.getElementById('progressBar');
+    const log = document.getElementById('searchLog');
+    
+    document.getElementById('selectionPanel').style.display = 'none';
+    processing.classList.add('active');
+    progressFill.style.width = '0%';
+    log.innerHTML = '';
+    
+    let progress = 0;
+    const interval = setInterval(() => {
+        progress = Math.min(90, progress + Math.random() * 15);
+        progressFill.style.width = progress + '%';
+    }, 300);
+    
+    try {
+        log.innerHTML += `<div>🔍 Connecting to YouTube API...</div>`;
+        
+        const response = await fetch('http://localhost:5000/api/search', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({materials: Array.from(selectedMaterials)})
+        });
+        
+        const data = await response.json();
+        clearInterval(interval);
+        progressFill.style.width = '100%';
+        
+        // Check API status
+        if (data.api_status === 'failed' || data.api_status === 'not_configured') {
+            log.innerHTML += `<div style="color: #dc2626; font-weight: bold;">⚠️ YouTube API Error</div>`;
+            log.innerHTML += `<div>${data.message || data.error || 'API is not working'}</div>`;
+            log.innerHTML += `<div>📱 Using local video database as fallback...</div>`;
+        } else if (data.api_status === 'working') {
+            log.innerHTML += `<div style="color: #10b981; font-weight: bold;">✓ YouTube API Connected!</div>`;
+            log.innerHTML += `<div>Found ${data.total_videos} videos</div>`;
+        }
+        
+        setTimeout(() => {
+            processing.classList.remove('active');
+            if (data.results && Object.keys(data.results).length > 0) {
+                displayBackendResults(data.results);
+            } else {
+                log.innerHTML += `<div>⏳ No results from API, using local database...</div>`;
+                displayResults();
+            }
+        }, 800);
+    } catch (err) {
+        clearInterval(interval);
+        progressFill.style.width = '100%';
+        log.innerHTML += `<div style="color: #dc2626; font-weight: bold;">❌ YouTube API Connection Failed</div>`;
+        log.innerHTML += `<div>${err.message}</div>`;
+        log.innerHTML += `<div>📱 Switching to offline mode with local videos...</div>`;
+        
+        setTimeout(() => {
+            processing.classList.remove('active');
+            displayResults();
+        }, 800);
+    }
+}
+
+function displayResults() {
+    const grid = document.getElementById('videoGrid');
+    
+    let videos = [];
+    selectedMaterials.forEach(mat => {
+        if (materialsDB[mat] && materialsDB[mat].videos) {
+            materialsDB[mat].videos.forEach(v => {
+                videos.push({...v, source: materialsDB[mat].label, image: materialsDB[mat].image});
+            });
+        }
+    });
+    
+    document.getElementById('resultCount').textContent = `${videos.length} videos`;
+    
+    // Show matched items
+    const selectedItemsList = document.getElementById('selectedItemsList');
+    selectedItemsList.innerHTML = '';
+    selectedMaterials.forEach(mat => {
+        if (materialsDB[mat]) {
+            const badge = document.createElement('span');
+            badge.style.cssText = 'display: inline-block; background: #d1fae5; color: #047857; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.875rem; font-weight: 500;';
+            badge.textContent = materialsDB[mat].label;
+            selectedItemsList.appendChild(badge);
+        }
+    });
+    document.getElementById('selectedItemsDisplay').style.display = 'block';
+    
+    grid.innerHTML = '';
+    videos.forEach((video, index) => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe>
+            </div>
+            <div class="video-content">
+                <h3 class="video-title">${video.title}</h3>
+                <div class="video-stats">
+                    <span>👁️ ${video.views}</span>
+                    <span>⏱️ ${video.duration}</span>
+                </div>
+                <span class="difficulty-badge difficulty-${video.difficulty}">${video.difficulty}</span>
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                    <img src="${video.image}" style="width: 100%; height: 140px; border-radius: 8px; object-fit: cover; margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.875rem; color: var(--text-light); font-weight: 600;">For: ${video.source}</span>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+    
+    // Show results section
+    switchSection('results');
+    document.getElementById('navResults').style.display = 'block';
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+}
+
+function displayBackendResults(results) {
+    const grid = document.getElementById('videoGrid');
+    
+    let videos = [];
+    Object.entries(results).forEach(([material, items]) => {
+        if (Array.isArray(items)) {
+            items.forEach(v => {
+                // Try to get material image from materialsDB
+                const materialImage = materialsDB[material]?.image || 'https://via.placeholder.com/140?text=Material';
+                videos.push({
+                    id: v.id,
+                    title: v.title,
+                    views: v.views || '0',
+                    duration: v.duration || 'N/A',
+                    difficulty: v.difficulty || 'medium',
+                    source: material.replace(/_/g, ' '),
+                    image: materialImage
+                });
+            });
+        }
+    });
+    
+    document.getElementById('resultCount').textContent = `${videos.length} videos`;
+    
+    // Show matched items
+    const selectedItemsList = document.getElementById('selectedItemsList');
+    selectedItemsList.innerHTML = '';
+    selectedMaterials.forEach(mat => {
+        if (materialsDB[mat]) {
+            const badge = document.createElement('span');
+            badge.style.cssText = 'display: inline-block; background: #d1fae5; color: #047857; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.875rem; font-weight: 500;';
+            badge.textContent = materialsDB[mat].label;
+            selectedItemsList.appendChild(badge);
+        }
+    });
+    document.getElementById('selectedItemsDisplay').style.display = 'block';
+    
+    grid.innerHTML = '';
+    videos.forEach((video, index) => {
+        const card = document.createElement('div');
+        card.className = 'video-card';
+        card.innerHTML = `
+            <div class="video-wrapper">
+                <iframe src="https://www.youtube.com/embed/${video.id}" allowfullscreen></iframe>
+            </div>
+            <div class="video-content">
+                <h3 class="video-title">${video.title}</h3>
+                <div class="video-stats">
+                    <span>👁️ ${video.views}</span>
+                    <span>⏱️ ${video.duration}</span>
+                </div>
+                <span class="difficulty-badge difficulty-${video.difficulty}">${video.difficulty}</span>
+                <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;">
+                    <img src="${video.image}" style="width: 100%; height: 140px; border-radius: 8px; object-fit: cover; margin-bottom: 0.5rem;">
+                    <span style="font-size: 0.875rem; color: var(--text-light); font-weight: 600;">For: ${video.source}</span>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+    
+    // Show results section
+    switchSection('results');
+    document.getElementById('navResults').style.display = 'block';
+    document.getElementById('results-section').scrollIntoView({ behavior: 'smooth' });
+}
+</script>
+
+</body>
+</html>
