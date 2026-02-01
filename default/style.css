@@ -133,6 +133,8 @@ body {
     font-size: 3rem;
     margin-bottom: 0.5rem;
     display: block;
+    font-family: "Segoe UI Emoji","Noto Color Emoji","Apple Color Emoji","Twemoji Mozilla", system-ui, sans-serif;
+    line-height: 1.2;
 }
 
 .item-name {
@@ -228,6 +230,7 @@ body {
 .dz-icon {
     font-size: 3rem;
     margin-bottom: 0.5rem;
+    font-family: "Segoe UI Emoji","Noto Color Emoji","Apple Color Emoji","Twemoji Mozilla", system-ui, sans-serif;
 }
 .dz-title {
     font-weight: 700;

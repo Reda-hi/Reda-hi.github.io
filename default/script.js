@@ -1,3 +1,4 @@
+const API_BASE = '/.netlify/functions';
 // Recyclable Items Data
 const recyclableItems = [
     // Plastic
@@ -15,7 +16,7 @@ const recyclableItems = [
     { id: 'pizza-box', name: 'Pizza Box', icon: '🍕', category: 'Paper' },
     
     // Glass/Metal
-    { id: 'glass-jar', name: 'Glass Jar', icon: '🫙', category: 'Glass' },
+    { id: 'glass-jar', name: 'Glass Jar', icon: '🍯', category: 'Glass' },
     { id: 'glass-bottle', name: 'Glass Bottle', icon: '🍾', category: 'Glass' },
     { id: 'tin-can', name: 'Tin Can', icon: '🥫', category: 'Metal' },
     { id: 'soda-can', name: 'Soda Can', icon: '🥤', category: 'Metal' },
@@ -312,6 +313,10 @@ async function publishWizard() {
     }
 }
 
+function onSubmitTutorial(e) {
+    e.preventDefault();
+    publishWizard();
+}
 async function uploadToCloudinary(file, meta) {
     // 1. Get Signature
     const sigResponse = await fetch(`${API_BASE}/get-signature`, {
