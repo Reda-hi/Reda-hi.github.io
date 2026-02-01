@@ -27,32 +27,68 @@
     </header>
 
     <main>
-        <section id="submit-section" class="container">
+        <section class="container">
             <div class="section-header">
                 <h2>Publish a Tutorial</h2>
-                <p>Submit your YouTube tutorial and tag items used.</p>
+                <p>Walk through steps to upload, describe, tag, and publish.</p>
             </div>
-            <form id="tutorial-form" class="tutorial-form">
-                <div class="form-row">
-                    <label for="video-title">Title</label>
-                    <input id="video-title" type="text" required placeholder="Creative Planter from Plastic Bottles">
+            <div class="wizard">
+                <div class="wizard-steps">
+                    <div class="wizard-step active" data-step="1">Upload</div>
+                    <div class="wizard-step" data-step="2">Details</div>
+                    <div class="wizard-step" data-step="3">Tags</div>
+                    <div class="wizard-step" data-step="4">Publish</div>
                 </div>
-                <div class="form-row">
-                    <label for="video-file">Video File</label>
-                    <input id="video-file" type="file" accept="video/*" required>
+                <div class="wizard-body">
+                    <div class="wizard-panel" data-step="1">
+                        <div id="dropzone" class="dropzone">
+                            <div class="dropzone-inner">
+                                <div class="dz-icon">📹</div>
+                                <div class="dz-title">Drag & drop your video here</div>
+                                <div class="dz-sub">or</div>
+                                <button id="choose-file" type="button" class="cta-button">Choose a file</button>
+                                <input id="video-file" type="file" accept="video/*" hidden>
+                            </div>
+                        </div>
+                        <div id="preview" class="preview" hidden>
+                            <video id="preview-video" controls></video>
+                        </div>
+                    </div>
+                    <div class="wizard-panel" data-step="2" hidden>
+                        <div class="form-row">
+                            <label for="video-title">Title</label>
+                            <input id="video-title" type="text" placeholder="Creative Planter from Plastic Bottles">
+                        </div>
+                        <div class="form-row">
+                            <label for="video-desc">Description</label>
+                            <textarea id="video-desc" rows="3" placeholder="Brief description of the tutorial"></textarea>
+                        </div>
+                    </div>
+                    <div class="wizard-panel" data-step="3" hidden>
+                        <label>Tags (items used)</label>
+                        <div id="tags-grid" class="tags-grid"></div>
+                    </div>
+                    <div class="wizard-panel" data-step="4" hidden>
+                        <div class="summary">
+                            <h3>Ready to publish</h3>
+                            <p>Review your info and press Publish.</p>
+                            <div class="storage-actions">
+                                <button id="export-library" type="button" class="cta-button">Export Library</button>
+                                <label class="cta-button" style="cursor:pointer;">
+                                    Import Library
+                                    <input id="import-library" type="file" accept="application/json" hidden>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-row">
-                    <label for="video-desc">Description</label>
-                    <textarea id="video-desc" rows="3" placeholder="Brief description of the tutorial"></textarea>
+                <div class="wizard-actions">
+                    <button id="back-btn" type="button" class="secondary-button" disabled>Back</button>
+                    <button id="next-btn" type="button" class="cta-button">Next</button>
+                    <button id="publish-btn" type="button" class="cta-button" hidden>Publish 📤</button>
                 </div>
-                <div class="form-row">
-                    <label>Tags (items used)</label>
-                    <div id="tags-grid" class="tags-grid"></div>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" id="submit-btn">Publish Tutorial 📤</button>
-                </div>
-            </form>
+                <form id="tutorial-form" hidden></form>
+            </div>
         </section>
     </main>
 

@@ -145,6 +145,20 @@ const resultsSection = document.getElementById('results-section');
 const resultsGrid = document.getElementById('results-grid');
 const tagsGrid = document.getElementById('tags-grid');
 const tutorialForm = document.getElementById('tutorial-form');
+const dropzone = document.getElementById('dropzone');
+const chooseFileBtn = document.getElementById('choose-file');
+const videoFileInput = document.getElementById('video-file');
+const previewWrap = document.getElementById('preview');
+const previewVideo = document.getElementById('preview-video');
+const wizardSteps = document.querySelectorAll('.wizard-step');
+const wizardPanels = document.querySelectorAll('.wizard-panel');
+const backBtn = document.getElementById('back-btn');
+const nextBtn = document.getElementById('next-btn');
+const publishBtn = document.getElementById('publish-btn');
+const exportBtn = document.getElementById('export-library');
+const importInput = document.getElementById('import-library');
+let currentStep = 1;
+let currentFile = null;
 
 // Initialize
 async function init() {
@@ -157,6 +171,7 @@ async function init() {
     initSubmission();
     await initDb();
     await loadUserVideos();
+    initWizard();
 }
 
 // Initialize Items Grid
@@ -199,6 +214,128 @@ function initSubmission() {
     }
 }
 
+function initWizard() {
+    if (!dropzone) return;
+    dropzone.addEventListener('dragover', e => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+    });
+    dropzone.addEventListener('dragleave', () => {
+        dropzone.classList.remove('dragover');
+    });
+    dropzone.addEventListener('drop', e => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+        const file = e.dataTransfer.files && e.dataTransfer.files[0] ? e.dataTransfer.files[0] : null;
+        if (file) setFile(file);
+    });
+    if (chooseFileBtn && videoFileInput) {
+        chooseFileBtn.addEventListener('click', () => videoFileInput.click());
+        videoFileInput.addEventListener('change', () => {
+            const file = videoFileInput.files && videoFileInput.files[0] ? videoFileInput.files[0] : null;
+            if (file) setFile(file);
+        });
+    }
+    if (backBtn && nextBtn && publishBtn) {
+        backBtn.addEventListener('click', () => goStep(currentStep - 1));
+        nextBtn.addEventListener('click', () => goStep(currentStep + 1));
+        publishBtn.addEventListener('click', publishWizard);
+    }
+    if (exportBtn) exportBtn.addEventListener('click', exportLibrary);
+    if (importInput) importInput.addEventListener('change', importLibrary);
+    goStep(1);
+}
+
+function setFile(file) {
+    currentFile = file;
+    const url = URL.createObjectURL(file);
+    if (previewWrap && previewVideo) {
+        previewWrap.hidden = false;
+        previewVideo.src = url;
+    }
+}
+
+function goStep(n) {
+    if (n < 1) n = 1;
+    if (n > 4) n = 4;
+    if (n === 2 && !currentFile) return;
+    if (n === 4) {
+        nextBtn.hidden = true;
+        publishBtn.hidden = false;
+    } else {
+        nextBtn.hidden = false;
+        publishBtn.hidden = true;
+    }
+    backBtn.disabled = n === 1;
+    currentStep = n;
+    wizardSteps.forEach(s => s.classList.toggle('active', Number(s.dataset.step) === n));
+    wizardPanels.forEach(p => p.hidden = Number(p.dataset.step) !== n);
+}
+
+async function publishWizard() {
+    const title = document.getElementById('video-title') ? document.getElementById('video-title').value.trim() : '';
+    const desc = document.getElementById('video-desc') ? document.getElementById('video-desc').value.trim() : '';
+    const tags = Array.from(tagsGrid ? tagsGrid.querySelectorAll('input[type=\"checkbox\"]:checked') : []).map(c => c.value);
+    if (!currentFile || !title || tags.length === 0) return;
+    const id = Date.now().toString();
+    const record = { id, title, description: desc, tags };
+    await saveVideo(record, currentFile);
+    const url = URL.createObjectURL(currentFile);
+    userVideos.push({ id, title, description: desc, tags, url });
+    currentFile = null;
+    goStep(1);
+}
+
+async function exportLibrary() {
+    const items = await new Promise(resolve => {
+        const tx = db.transaction('videos', 'readonly');
+        const store = tx.objectStore('videos');
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => resolve([]);
+    });
+    const toDataUrl = (blob) => new Promise(res => {
+        const fr = new FileReader();
+        fr.onload = () => res(fr.result);
+        fr.readAsDataURL(blob);
+    });
+    const payload = [];
+    for (const it of items) {
+        const dataUrl = it.file ? await toDataUrl(it.file) : '';
+        payload.push({ id: it.id, title: it.title, description: it.description || '', tags: it.tags || [], file: dataUrl });
+    }
+    const blob = new Blob([JSON.stringify({ videos: payload })], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'recycle-library.json';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}
+
+async function importLibrary(e) {
+    const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
+    if (!file) return;
+    const text = await file.text();
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch {
+        return;
+    }
+    const items = Array.isArray(data.videos) ? data.videos : [];
+    for (const it of items) {
+        let blob = null;
+        if (it.file && it.file.startsWith('data:')) {
+            const res = await fetch(it.file);
+            blob = await res.blob();
+        }
+        await saveVideo({ id: it.id, title: it.title, description: it.description || '', tags: it.tags || [] }, blob);
+    }
+    await loadUserVideos();
+}
 function onSubmitTutorial(e) {
     e.preventDefault();
     const title = document.getElementById('video-title').value.trim();
