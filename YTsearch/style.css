@@ -6,6 +6,7 @@
 }
 * { box-sizing: border-box; }
 body { margin: 0; font-family: Poppins, sans-serif; background: var(--light); color: var(--dark); }
+body { display:flex; flex-direction:column; min-height:100vh; }
 .navbar { display:flex; justify-content:space-between; align-items:center; padding:1rem 2rem; background:#fff; box-shadow:0 4px 20px rgba(0,0,0,0.06); }
 .logo { font-weight:700; }
 .nav-links a { margin-left:1rem; color:var(--dark); text-decoration:none; }
@@ -24,3 +25,15 @@ body { margin: 0; font-family: Poppins, sans-serif; background: var(--light); co
 .card-body { padding:.8rem 1rem; }
 .card-title { font-weight:600; margin:0 0 .4rem; }
 .card-desc { font-size:.9rem; color:#666; }
+main { flex: 1; }
+footer { 
+  display:flex; 
+  flex-direction:column; 
+  align-items:center; 
+  justify-content:center; 
+  text-align:center; 
+  padding:1rem 0; 
+  margin-top:2rem; 
+  width:100%;
+}
+footer p { margin:.25rem 0; }
