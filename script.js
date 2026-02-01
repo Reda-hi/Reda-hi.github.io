@@ -136,6 +136,7 @@ const mockApiIndex = [
 // State
 const selectedItems = new Set();
 let userVideos = [];
+let db;
 
 // DOM Elements
 const itemsGrid = document.getElementById('items-grid');
@@ -146,7 +147,7 @@ const tagsGrid = document.getElementById('tags-grid');
 const tutorialForm = document.getElementById('tutorial-form');
 
 // Initialize
-function init() {
+async function init() {
     if (itemsGrid) {
         initItems();
     }
@@ -154,7 +155,8 @@ function init() {
         searchBtn.addEventListener('click', handleSearch);
     }
     initSubmission();
-    loadUserVideos();
+    await initDb();
+    await loadUserVideos();
 }
 
 // Initialize Items Grid
@@ -200,45 +202,56 @@ function initSubmission() {
 function onSubmitTutorial(e) {
     e.preventDefault();
     const title = document.getElementById('video-title').value.trim();
-    const url = document.getElementById('video-url').value.trim();
+    const fileInput = document.getElementById('video-file');
+    const file = fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
     const desc = document.getElementById('video-desc').value.trim();
     const tags = Array.from(tagsGrid.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
-    const videoId = extractYouTubeId(url);
-    if (!title || !url || !videoId || tags.length === 0) return;
-    const record = {
-        id: Date.now().toString(),
-        videoId,
-        title,
-        description: desc,
-        tags
-    };
-    userVideos.push(record);
-    localStorage.setItem('recycle_videos', JSON.stringify(userVideos));
+    if (!title || !file || tags.length === 0) return;
+    const id = Date.now().toString();
+    const record = { id, title, description: desc, tags };
+    saveVideo(record, file).then(async () => {
+        const url = URL.createObjectURL(file);
+        userVideos.push({ id, title, description: desc, tags, url });
+    });
     tutorialForm.reset();
 }
 
-function loadUserVideos() {
-    try {
-        const raw = localStorage.getItem('recycle_videos');
-        userVideos = raw ? JSON.parse(raw) : [];
-    } catch {
-        userVideos = [];
-    }
+async function initDb() {
+    db = await new Promise((resolve, reject) => {
+        const req = indexedDB.open('recycle_db', 1);
+        req.onupgradeneeded = () => {
+            const d = req.result;
+            if (!d.objectStoreNames.contains('videos')) {
+                const store = d.createObjectStore('videos', { keyPath: 'id' });
+                store.createIndex('tags', 'tags', { multiEntry: true });
+            }
+        };
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => reject(req.error);
+    });
 }
 
-function extractYouTubeId(url) {
-    try {
-        const u = new URL(url);
-        if (u.hostname.includes('youtube.com')) {
-            return u.searchParams.get('v');
-        }
-        if (u.hostname.includes('youtu.be')) {
-            return u.pathname.replace('/', '');
-        }
-        return '';
-    } catch {
-        return '';
-    }
+async function saveVideo(meta, file) {
+    return new Promise((resolve, reject) => {
+        const tx = db.transaction('videos', 'readwrite');
+        const store = tx.objectStore('videos');
+        store.put({ ...meta, file });
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject(tx.error);
+    });
+}
+
+async function loadUserVideos() {
+    userVideos = await new Promise((resolve) => {
+        const tx = db.transaction('videos', 'readonly');
+        const store = tx.objectStore('videos');
+        const req = store.getAll();
+        req.onsuccess = () => {
+            const items = (req.result || []).map(v => ({ id: v.id, title: v.title, description: v.description || '', tags: v.tags || [], url: v.file ? URL.createObjectURL(v.file) : '' }));
+            resolve(items);
+        };
+        req.onerror = () => resolve([]);
+    });
 }
 // Toggle Item Selection
 function toggleItem(itemId) {
@@ -308,64 +321,23 @@ async function fetchVideos(query) {
     // Simulate Network Delay for realism
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    const local = searchLocalVideos();
-    if (local.length > 0) return local;
-    return mockApiSearch();
+    const local = await searchLocalVideos();
+    return local;
 }
 
 // Removed proxy-based search; purely community + curated examples
 
 // API: Mock Implementation (Smart Search)
 function mockApiSearch() {
-    const selectedIds = Array.from(selectedItems);
-    let results = [];
-    
-    // Strategy 1: Look for Exact Combination Matches
-    const combinationMatch = mockApiIndex.find(entry => {
-        // Check if entry keywords are a subset of selected items
-        return entry.keywords.length > 1 && 
-               entry.keywords.every(k => selectedIds.includes(k));
-    });
-
-    if (combinationMatch) {
-        results.push({ ...combinationMatch, relatedItem: 'Combo Special! ✨' });
-    }
-
-    // Strategy 2: Look for Individual Item Matches
-    selectedIds.forEach(id => {
-        const matches = mockApiIndex.filter(entry => 
-            entry.keywords.length === 1 && entry.keywords.includes(id)
-        );
-        matches.forEach(m => {
-            // Avoid duplicates
-            if (!results.some(r => r.videoId === m.videoId)) {
-                results.push({ 
-                    ...m, 
-                    relatedItem: recyclableItems.find(i => i.id === id).name 
-                });
-            }
-        });
-    });
-
-    // Fallback if no specific matches found
-    if (results.length === 0) {
-        results.push(mockApiIndex.find(entry => entry.keywords.includes('default')) || {
-             videoId: 'ehdPEJ4j1go',
-             title: 'General Recycling Ideas',
-             description: 'Cool projects for various materials.',
-             relatedItem: 'General'
-        });
-    }
-
-    return results;
+    return [];
 }
 
-function searchLocalVideos() {
+async function searchLocalVideos() {
     const ids = Array.from(selectedItems);
     if (ids.length === 0) return [];
     const matches = userVideos.filter(v => ids.every(t => v.tags.includes(t)));
     return matches.map(v => ({
-        videoId: v.videoId,
+        videoUrl: v.url,
         title: v.title,
         description: v.description || '',
         relatedItem: 'Community'
@@ -386,12 +358,7 @@ function displayResults(results) {
         
         card.innerHTML = `
             <div class="video-container">
-                <iframe 
-                    src="https://www.youtube.com/embed/${result.videoId}" 
-                    title="${result.title}" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                    allowfullscreen>
-                </iframe>
+                <video src="${result.videoUrl}" controls></video>
             </div>
             <div class="result-content">
                 <h3>${result.title}</h3>
