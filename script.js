@@ -169,8 +169,6 @@ async function init() {
         searchBtn.addEventListener('click', handleSearch);
     }
     initSubmission();
-    await initDb();
-    await loadUserVideos();
     initWizard();
 }
 
@@ -275,120 +273,83 @@ function goStep(n) {
 async function publishWizard() {
     const title = document.getElementById('video-title') ? document.getElementById('video-title').value.trim() : '';
     const desc = document.getElementById('video-desc') ? document.getElementById('video-desc').value.trim() : '';
-    const tags = Array.from(tagsGrid ? tagsGrid.querySelectorAll('input[type=\"checkbox\"]:checked') : []).map(c => c.value);
-    if (!currentFile || !title || tags.length === 0) return;
-    const id = Date.now().toString();
-    const record = { id, title, description: desc, tags };
-    await saveVideo(record, currentFile);
-    const url = URL.createObjectURL(currentFile);
-    userVideos.push({ id, title, description: desc, tags, url });
-    currentFile = null;
-    goStep(1);
-}
-
-async function exportLibrary() {
-    const items = await new Promise(resolve => {
-        const tx = db.transaction('videos', 'readonly');
-        const store = tx.objectStore('videos');
-        const req = store.getAll();
-        req.onsuccess = () => resolve(req.result || []);
-        req.onerror = () => resolve([]);
-    });
-    const toDataUrl = (blob) => new Promise(res => {
-        const fr = new FileReader();
-        fr.onload = () => res(fr.result);
-        fr.readAsDataURL(blob);
-    });
-    const payload = [];
-    for (const it of items) {
-        const dataUrl = it.file ? await toDataUrl(it.file) : '';
-        payload.push({ id: it.id, title: it.title, description: it.description || '', tags: it.tags || [], file: dataUrl });
-    }
-    const blob = new Blob([JSON.stringify({ videos: payload })], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = 'recycle-library.json';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-}
-
-async function importLibrary(e) {
-    const file = e.target.files && e.target.files[0] ? e.target.files[0] : null;
-    if (!file) return;
-    const text = await file.text();
-    let data;
-    try {
-        data = JSON.parse(text);
-    } catch {
+    const tags = Array.from(tagsGrid ? tagsGrid.querySelectorAll('input[type="checkbox"]:checked') : []).map(c => c.value);
+    
+    if (!currentFile || !title || tags.length === 0) {
+        alert('Please fill in all fields and upload a video.');
         return;
     }
-    const items = Array.isArray(data.videos) ? data.videos : [];
-    for (const it of items) {
-        let blob = null;
-        if (it.file && it.file.startsWith('data:')) {
-            const res = await fetch(it.file);
-            blob = await res.blob();
+
+    const originalBtnText = publishBtn.textContent;
+    publishBtn.textContent = 'Uploading... ⏳';
+    publishBtn.disabled = true;
+
+    try {
+        await uploadToCloudinary(currentFile, { title, description: desc, tags });
+        
+        alert('Published Successfully! 🎉 Your video is now live.');
+        
+        // Reset Form
+        document.getElementById('tutorial-form').reset();
+        if(document.getElementById('video-title')) document.getElementById('video-title').value = '';
+        if(document.getElementById('video-desc')) document.getElementById('video-desc').value = '';
+        if(tagsGrid) tagsGrid.querySelectorAll('input').forEach(i => i.checked = false);
+        
+        currentFile = null;
+        if (previewWrap) previewWrap.hidden = true;
+        if (dropzone) {
+            dropzone.classList.remove('active');
+            dropzone.querySelector('.dropzone-inner').hidden = false;
         }
-        await saveVideo({ id: it.id, title: it.title, description: it.description || '', tags: it.tags || [] }, blob);
+
+        goStep(1);
+    } catch (error) {
+        console.error('Upload failed:', error);
+        alert('Upload failed: ' + error.message);
+    } finally {
+        publishBtn.textContent = originalBtnText;
+        publishBtn.disabled = false;
     }
-    await loadUserVideos();
-}
-function onSubmitTutorial(e) {
-    e.preventDefault();
-    const title = document.getElementById('video-title').value.trim();
-    const fileInput = document.getElementById('video-file');
-    const file = fileInput && fileInput.files && fileInput.files[0] ? fileInput.files[0] : null;
-    const desc = document.getElementById('video-desc').value.trim();
-    const tags = Array.from(tagsGrid.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
-    if (!title || !file || tags.length === 0) return;
-    const id = Date.now().toString();
-    const record = { id, title, description: desc, tags };
-    saveVideo(record, file).then(async () => {
-        const url = URL.createObjectURL(file);
-        userVideos.push({ id, title, description: desc, tags, url });
-    });
-    tutorialForm.reset();
 }
 
-async function initDb() {
-    db = await new Promise((resolve, reject) => {
-        const req = indexedDB.open('recycle_db', 1);
-        req.onupgradeneeded = () => {
-            const d = req.result;
-            if (!d.objectStoreNames.contains('videos')) {
-                const store = d.createObjectStore('videos', { keyPath: 'id' });
-                store.createIndex('tags', 'tags', { multiEntry: true });
-            }
-        };
-        req.onsuccess = () => resolve(req.result);
-        req.onerror = () => reject(req.error);
+async function uploadToCloudinary(file, meta) {
+    // 1. Get Signature
+    const sigResponse = await fetch(`${API_BASE}/get-signature`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            tags: meta.tags.join(','),
+            title: meta.title,
+            description: meta.description
+        })
     });
-}
-
-async function saveVideo(meta, file) {
-    return new Promise((resolve, reject) => {
-        const tx = db.transaction('videos', 'readwrite');
-        const store = tx.objectStore('videos');
-        store.put({ ...meta, file });
-        tx.oncomplete = () => resolve();
-        tx.onerror = () => reject(tx.error);
+    
+    if (!sigResponse.ok) throw new Error('Failed to initialize upload');
+    const sigData = await sigResponse.json();
+    
+    // 2. Upload to Cloudinary
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('api_key', sigData.api_key);
+    formData.append('timestamp', sigData.timestamp);
+    formData.append('signature', sigData.signature);
+    formData.append('folder', sigData.folder);
+    formData.append('tags', sigData.tags);
+    formData.append('context', sigData.context);
+    
+    const uploadUrl = `https://api.cloudinary.com/v1_1/${sigData.cloud_name}/video/upload`;
+    
+    const uploadResponse = await fetch(uploadUrl, {
+        method: 'POST',
+        body: formData
     });
-}
-
-async function loadUserVideos() {
-    userVideos = await new Promise((resolve) => {
-        const tx = db.transaction('videos', 'readonly');
-        const store = tx.objectStore('videos');
-        const req = store.getAll();
-        req.onsuccess = () => {
-            const items = (req.result || []).map(v => ({ id: v.id, title: v.title, description: v.description || '', tags: v.tags || [], url: v.file ? URL.createObjectURL(v.file) : '' }));
-            resolve(items);
-        };
-        req.onerror = () => resolve([]);
-    });
+    
+    if (!uploadResponse.ok) {
+        const err = await uploadResponse.json();
+        throw new Error(err.error?.message || 'Upload failed');
+    }
+    
+    return await uploadResponse.json();
 }
 // Toggle Item Selection
 function toggleItem(itemId) {
@@ -455,11 +416,24 @@ function constructSearchQuery() {
 
 // API: Fetch Videos
 async function fetchVideos(query) {
-    // Simulate Network Delay for realism
-    await new Promise(resolve => setTimeout(resolve, 1500));
-
-    const local = await searchLocalVideos();
-    return local;
+    // Search using Cloudinary Tags
+    const tags = Array.from(selectedItems).join(',');
+    
+    try {
+        const res = await fetch(`${API_BASE}/get-videos?tags=${tags}`);
+        if (!res.ok) throw new Error('Search failed');
+        const videos = await res.json();
+        
+        return videos.map(v => ({
+            videoUrl: v.url,
+            title: v.title,
+            description: v.description,
+            relatedItem: 'Community Result'
+        }));
+    } catch (err) {
+        console.error('API Error:', err);
+        return [];
+    }
 }
 
 // Removed proxy-based search; purely community + curated examples
@@ -470,15 +444,8 @@ function mockApiSearch() {
 }
 
 async function searchLocalVideos() {
-    const ids = Array.from(selectedItems);
-    if (ids.length === 0) return [];
-    const matches = userVideos.filter(v => ids.every(t => v.tags.includes(t)));
-    return matches.map(v => ({
-        videoUrl: v.url,
-        title: v.title,
-        description: v.description || '',
-        relatedItem: 'Community'
-    }));
+    // Legacy function, no longer used
+    return [];
 }
 // Display Results
 function displayResults(results) {
