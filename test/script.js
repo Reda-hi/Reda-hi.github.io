@@ -1,6 +1,7 @@
-// YouTube API Configuration
-const YOUTUBE_API_KEY = 'YOUR_API_KEY_HERE'; // Replace with your actual YouTube Data API Key
-const API_URL = 'https://www.googleapis.com/youtube/v3/search';
+// YouTube API Configuration (Proxied via Netlify Functions)
+// If hosting locally or on Netlify, use relative path. 
+// If on GitHub Pages, you must point to your deployed Netlify Functions URL.
+const API_BASE = '/.netlify/functions'; 
 
 // Recyclable Items Data
 const recyclableItems = [
