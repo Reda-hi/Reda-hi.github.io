@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recycle-it | Upload</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="logo">Recycle-it ♻️</div>
+        <div class="nav-links">
+            <a href="../search/">Search</a>
+            <a href="../upload/">Upload</a>
+        </div>
+    </nav>
+
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Share Your Tutorial</h1>
+            <p class="subtitle">Add your video and tag the items used so others can find it.</p>
+            <a href="#submit-section" class="cta-button">Start Uploading</a>
+        </div>
+    </header>
+
+    <main>
+        <section id="submit-section" class="container">
+            <div class="section-header">
+                <h2>Publish a Tutorial</h2>
+                <p>Submit your YouTube tutorial and tag items used.</p>
+            </div>
+            <form id="tutorial-form" class="tutorial-form">
+                <div class="form-row">
+                    <label for="video-title">Title</label>
+                    <input id="video-title" type="text" required placeholder="Creative Planter from Plastic Bottles">
+                </div>
+                <div class="form-row">
+                    <label for="video-url">Video URL (YouTube)</label>
+                    <input id="video-url" type="url" required placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX">
+                </div>
+                <div class="form-row">
+                    <label for="video-desc">Description</label>
+                    <textarea id="video-desc" rows="3" placeholder="Brief description of the tutorial"></textarea>
+                </div>
+                <div class="form-row">
+                    <label>Tags (items used)</label>
+                    <div id="tags-grid" class="tags-grid"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="submit-btn">Publish Tutorial 📤</button>
+                </div>
+            </form>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 JLM ENSAM Casablanca. All rights reserved.</p>
+        <p>Making the world greener, one item at a time.</p>
+    </footer>
+
+    <script src="../script.js"></script>
+    </body>
+    </html>

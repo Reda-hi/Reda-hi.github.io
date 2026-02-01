@@ -147,8 +147,12 @@ const tutorialForm = document.getElementById('tutorial-form');
 
 // Initialize
 function init() {
-    initItems();
-    searchBtn.addEventListener('click', handleSearch);
+    if (itemsGrid) {
+        initItems();
+    }
+    if (searchBtn) {
+        searchBtn.addEventListener('click', handleSearch);
+    }
     initSubmission();
     loadUserVideos();
 }

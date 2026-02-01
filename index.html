@@ -12,7 +12,10 @@
 <body>
     <nav class="navbar">
         <div class="logo">Recycle-it ♻️</div>
-        <div class="club-name">JLM ENSAM Casablanca</div>
+        <div class="nav-links">
+            <a href="./search/">Search</a>
+            <a href="./upload/">Upload</a>
+        </div>
     </nav>
 
     <header class="hero">
@@ -24,61 +27,20 @@
                 we help you find creative ways to repurpose everyday items. 
                 Don't throw it away—Recycle-it!
             </p>
-            <a href="#items-section" class="cta-button">Start Recycling</a>
+            <a href="./search/" class="cta-button">Start Searching</a>
         </div>
     </header>
 
     <main>
-        <section id="items-section" class="container">
+        <section class="container">
             <div class="section-header">
-                <h2>What do you have?</h2>
-                <p>Select the items lying around your house to discover amazing DIY projects.</p>
+                <h2>Explore</h2>
+                <p>Browse community tutorials or share your own.</p>
             </div>
-            
-            <div id="items-grid" class="items-grid">
-                <!-- Items will be injected here by JS -->
-            </div>
-            
             <div class="action-area">
-                <button id="search-btn" disabled>Find Creative Ideas ✨</button>
-            </div>
-        </section>
-
-        <section id="submit-section" class="container">
-            <div class="section-header">
-                <h2>Share Your Tutorial</h2>
-                <p>Add your video and tag the items used so others can find it.</p>
-            </div>
-            <form id="tutorial-form" class="tutorial-form">
-                <div class="form-row">
-                    <label for="video-title">Title</label>
-                    <input id="video-title" type="text" required placeholder="Creative Planter from Plastic Bottles">
-                </div>
-                <div class="form-row">
-                    <label for="video-url">Video URL (YouTube)</label>
-                    <input id="video-url" type="url" required placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX">
-                </div>
-                <div class="form-row">
-                    <label for="video-desc">Description</label>
-                    <textarea id="video-desc" rows="3" placeholder="Brief description of the tutorial"></textarea>
-                </div>
-                <div class="form-row">
-                    <label>Tags (items used)</label>
-                    <div id="tags-grid" class="tags-grid"></div>
-                </div>
-                <div class="form-actions">
-                    <button type="submit" id="submit-btn">Publish Tutorial 📤</button>
-                </div>
-            </form>
-        </section>
-
-        <section id="results-section" class="container" hidden>
-            <div class="section-header">
-                <h2>Your Personalized Projects</h2>
-                <p>Here are some specific ideas we found for you:</p>
-            </div>
-            <div id="results-grid" class="results-grid">
-                <!-- Results will be displayed here -->
+                <a class="cta-button" href="./search/">Search Tutorials</a>
+                <span style="margin:0 1rem;"></span>
+                <a class="cta-button" href="./upload/">Upload Tutorial</a>
             </div>
         </section>
     </main>
