@@ -1,145 +1,28 @@
 const API_BASE = '/.netlify/functions';
-// Recyclable Items Data
 const recyclableItems = [
-    // Plastic
     { id: 'plastic-bottle', name: 'Plastic Bottle', icon: '🥤', category: 'Plastic' },
     { id: 'plastic-container', name: 'Food Container', icon: '🥡', category: 'Plastic' },
     { id: 'plastic-bag', name: 'Plastic Bag', icon: '🛍️', category: 'Plastic' },
     { id: 'bottle-cap', name: 'Bottle Caps', icon: '🔴', category: 'Plastic' },
-    
-    // Paper/Cardboard
     { id: 'cardboard-box', name: 'Cardboard Box', icon: '📦', category: 'Paper' },
     { id: 'toilet-roll', name: 'Toilet Roll', icon: '🧻', category: 'Paper' },
     { id: 'newspaper', name: 'Newspaper', icon: '📰', category: 'Paper' },
     { id: 'egg-carton', name: 'Egg Carton', icon: '🥚', category: 'Paper' },
     { id: 'cereal-box', name: 'Cereal Box', icon: '🥣', category: 'Paper' },
     { id: 'pizza-box', name: 'Pizza Box', icon: '🍕', category: 'Paper' },
-    
-    // Glass/Metal
     { id: 'glass-jar', name: 'Glass Jar', icon: '🍯', category: 'Glass' },
     { id: 'glass-bottle', name: 'Glass Bottle', icon: '🍾', category: 'Glass' },
     { id: 'tin-can', name: 'Tin Can', icon: '🥫', category: 'Metal' },
     { id: 'soda-can', name: 'Soda Can', icon: '🥤', category: 'Metal' },
-    
-    // Fabric/Textiles
     { id: 'old-tshirt', name: 'Old T-Shirt', icon: '👕', category: 'Fabric' },
     { id: 'jeans', name: 'Old Jeans', icon: '👖', category: 'Fabric' },
     { id: 'socks', name: 'Old Socks', icon: '🧦', category: 'Fabric' },
-    
-    // Electronics/Other
     { id: 'cd-dvd', name: 'Old CD/DVD', icon: '💿', category: 'Electronics' },
     { id: 'coffee-grounds', name: 'Coffee Grounds', icon: '☕', category: 'Organic' },
     { id: 'egg-shells', name: 'Egg Shells', icon: '🥚', category: 'Organic' },
     { id: 'wine-cork', name: 'Wine Cork', icon: '🍾', category: 'Other' }
 ];
-// Community-driven: no external API configuration
-
-// "Mock API" Database - Simulates a massive search index
-// This handles single items AND combinations
-const mockApiIndex = [
-    // Combinations (Priority)
-    {
-        keywords: ['plastic-bottle', 'cardboard-box'],
-        videoId: '7lCjV9w_M28',
-        title: 'Amazing Crafts with Plastic Bottles & Cardboard',
-        description: 'Learn how to combine bottles and cardboard to make a stunning organizer.'
-    },
-    {
-        keywords: ['toilet-roll', 'cardboard-box'],
-        videoId: 's4vJ0wW_v1k',
-        title: 'Desk Organizer from Cardboard & Rolls',
-        description: 'The ultimate zero-waste desk setup using bathroom rolls and boxes.'
-    },
-    {
-        keywords: ['glass-jar', 'wine-cork'],
-        videoId: 'b5aJq_y4w7E',
-        title: 'DIY Glass Jar Decor with Corks',
-        description: 'Rustic home decor using leftover jars and wine corks.'
-    },
-
-    // Singles - Plastic
-    {
-        keywords: ['plastic-bottle'],
-        videoId: 'y1as5sGHCOQ',
-        title: '4 Easy DIY Planters using Plastic Bottles',
-        description: 'Transform your plastic bottles into cute boho planters for your home garden.'
-    },
-    {
-        keywords: ['plastic-container'],
-        videoId: 'xPj64n4Wq6Y',
-        title: 'Creative Plastic Container Reuse',
-        description: 'Learn how to turn food containers into useful organizers.'
-    },
-    {
-        keywords: ['bottle-cap'],
-        videoId: 'q1j2k3l4m5n', // Placeholder ID
-        title: '10 Crafts with Bottle Caps',
-        description: 'Don\'t toss them! Make art, coasters, and games.'
-    },
-
-    // Singles - Paper
-    {
-        keywords: ['cardboard-box'],
-        videoId: 'c0uu1kg6_iI',
-        title: '5 Simple DIY Organizers from Cardboard',
-        description: 'Make amazing storage solutions using just cardboard boxes and glue.'
-    },
-    {
-        keywords: ['newspaper'],
-        videoId: 'a1b2c3d4e5f', // Placeholder
-        title: 'Woven Basket from Newspaper',
-        description: 'Ancient weaving techniques using old newspapers.'
-    },
-    {
-        keywords: ['toilet-roll'],
-        videoId: 'g6h7i8j9k0l', // Placeholder
-        title: 'Toilet Roll Wall Art',
-        description: 'Create stunning wall decor that looks like wrought iron.'
-    },
-
-    // Singles - Fabric
-    {
-        keywords: ['old-tshirt'],
-        videoId: 'xpyTG7oznZM',
-        title: 'How to Make T-Shirt Yarn',
-        description: 'Turn your old t-shirts into yarn for knitting, crochet, or weaving projects.'
-    },
-    {
-        keywords: ['jeans'],
-        videoId: 'm1n2o3p4q5r', // Placeholder
-        title: 'No-Sew Denim Apron',
-        description: 'Upcycle old jeans into a sturdy workshop apron.'
-    },
-
-    // Singles - Glass/Metal
-    {
-        keywords: ['glass-jar'],
-        videoId: 'zCTp_rqKZiw',
-        title: 'Magical Lanterns from Glass Jars',
-        description: 'Create beautiful decorative lanterns using simple materials and glass jars.'
-    },
-    {
-        keywords: ['tin-can'],
-        videoId: 's1t2u3v4w5x', // Placeholder
-        title: 'Tin Can Cutlery Holder',
-        description: 'Rustic chic storage for your kitchen utensils.'
-    },
-    
-    // Singles - Organic
-    {
-        keywords: ['coffee-grounds'],
-        videoId: 'y1z2a3b4c5d', // Placeholder
-        title: 'Coffee Ground Body Scrub',
-        description: 'Turn morning waste into a luxurious skincare product.'
-    }
-];
-
-// State
 const selectedItems = new Set();
-let userVideos = [];
-let db;
-
-// DOM Elements
 const itemsGrid = document.getElementById('items-grid');
 const searchBtn = document.getElementById('search-btn');
 const resultsSection = document.getElementById('results-section');
@@ -160,20 +43,12 @@ const exportBtn = document.getElementById('export-library');
 const importInput = document.getElementById('import-library');
 let currentStep = 1;
 let currentFile = null;
-
-// Initialize
-async function init() {
-    if (itemsGrid) {
-        initItems();
-    }
-    if (searchBtn) {
-        searchBtn.addEventListener('click', handleSearch);
-    }
+function init() {
+    if (itemsGrid) initItems();
+    if (searchBtn) searchBtn.addEventListener('click', handleSearch);
     initSubmission();
     initWizard();
 }
-
-// Initialize Items Grid
 function initItems() {
     itemsGrid.innerHTML = '';
     recyclableItems.forEach(item => {
@@ -181,17 +56,14 @@ function initItems() {
         card.className = 'item-card';
         card.dataset.id = item.id;
         card.onclick = () => toggleItem(item.id);
-        
         card.innerHTML = `
             <span class="item-icon">${item.icon}</span>
             <span class="item-name">${item.name}</span>
             <span class="item-category">${item.category}</span>
         `;
-        
         itemsGrid.appendChild(card);
     });
 }
-
 function initSubmission() {
     if (tagsGrid) {
         tagsGrid.innerHTML = '';
@@ -212,16 +84,10 @@ function initSubmission() {
         tutorialForm.addEventListener('submit', onSubmitTutorial);
     }
 }
-
 function initWizard() {
     if (!dropzone) return;
-    dropzone.addEventListener('dragover', e => {
-        e.preventDefault();
-        dropzone.classList.add('dragover');
-    });
-    dropzone.addEventListener('dragleave', () => {
-        dropzone.classList.remove('dragover');
-    });
+    dropzone.addEventListener('dragover', e => { e.preventDefault(); dropzone.classList.add('dragover'); });
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
     dropzone.addEventListener('drop', e => {
         e.preventDefault();
         dropzone.classList.remove('dragover');
@@ -244,7 +110,6 @@ function initWizard() {
     if (importInput) importInput.addEventListener('change', importLibrary);
     goStep(1);
 }
-
 function setFile(file) {
     currentFile = file;
     const url = URL.createObjectURL(file);
@@ -253,56 +118,35 @@ function setFile(file) {
         previewVideo.src = url;
     }
 }
-
 function goStep(n) {
     if (n < 1) n = 1;
     if (n > 4) n = 4;
     if (n === 2 && !currentFile) return;
-    if (n === 4) {
-        nextBtn.hidden = true;
-        publishBtn.hidden = false;
-    } else {
-        nextBtn.hidden = false;
-        publishBtn.hidden = true;
-    }
+    if (n === 4) { nextBtn.hidden = true; publishBtn.hidden = false; }
+    else { nextBtn.hidden = false; publishBtn.hidden = true; }
     backBtn.disabled = n === 1;
     currentStep = n;
     wizardSteps.forEach(s => s.classList.toggle('active', Number(s.dataset.step) === n));
     wizardPanels.forEach(p => p.hidden = Number(p.dataset.step) !== n);
 }
-
 async function publishWizard() {
     const title = document.getElementById('video-title') ? document.getElementById('video-title').value.trim() : '';
     const desc = document.getElementById('video-desc') ? document.getElementById('video-desc').value.trim() : '';
     const tags = Array.from(tagsGrid ? tagsGrid.querySelectorAll('input[type="checkbox"]:checked') : []).map(c => c.value);
-    
-    if (!currentFile || !title || tags.length === 0) {
-        alert('Please fill in all fields and upload a video.');
-        return;
-    }
-
+    if (!currentFile || !title || tags.length === 0) { alert('Please fill in all fields and upload a video.'); return; }
     const originalBtnText = publishBtn.textContent;
     publishBtn.textContent = 'Uploading... ⏳';
     publishBtn.disabled = true;
-
     try {
         await uploadToCloudinary(currentFile, { title, description: desc, tags });
-        
         alert('Published Successfully! 🎉 Your video is now live.');
-        
-        // Reset Form
         document.getElementById('tutorial-form').reset();
         if(document.getElementById('video-title')) document.getElementById('video-title').value = '';
         if(document.getElementById('video-desc')) document.getElementById('video-desc').value = '';
         if(tagsGrid) tagsGrid.querySelectorAll('input').forEach(i => i.checked = false);
-        
         currentFile = null;
         if (previewWrap) previewWrap.hidden = true;
-        if (dropzone) {
-            dropzone.classList.remove('active');
-            dropzone.querySelector('.dropzone-inner').hidden = false;
-        }
-
+        if (dropzone) { dropzone.classList.remove('active'); dropzone.querySelector('.dropzone-inner').hidden = false; }
         goStep(1);
     } catch (error) {
         console.error('Upload failed:', error);
@@ -312,27 +156,13 @@ async function publishWizard() {
         publishBtn.disabled = false;
     }
 }
-
-function onSubmitTutorial(e) {
-    e.preventDefault();
-    publishWizard();
-}
 async function uploadToCloudinary(file, meta) {
-    // 1. Get Signature
     const sigResponse = await fetch(`${API_BASE}/get-signature`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-            tags: meta.tags.join(','),
-            title: meta.title,
-            description: meta.description
-        })
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ tags: meta.tags.join(','), title: meta.title, description: meta.description })
     });
-    
     if (!sigResponse.ok) throw new Error('Failed to initialize upload');
     const sigData = await sigResponse.json();
-    
-    // 2. Upload to Cloudinary
     const formData = new FormData();
     formData.append('file', file);
     formData.append('api_key', sigData.api_key);
@@ -341,65 +171,30 @@ async function uploadToCloudinary(file, meta) {
     formData.append('folder', sigData.folder);
     formData.append('tags', sigData.tags);
     formData.append('context', sigData.context);
-    
     const uploadUrl = `https://api.cloudinary.com/v1_1/${sigData.cloud_name}/video/upload`;
-    
-    const uploadResponse = await fetch(uploadUrl, {
-        method: 'POST',
-        body: formData
-    });
-    
-    if (!uploadResponse.ok) {
-        const err = await uploadResponse.json();
-        throw new Error(err.error?.message || 'Upload failed');
-    }
-    
+    const uploadResponse = await fetch(uploadUrl, { method: 'POST', body: formData });
+    if (!uploadResponse.ok) { const err = await uploadResponse.json(); throw new Error(err.error?.message || 'Upload failed'); }
     return await uploadResponse.json();
 }
-// Toggle Item Selection
 function toggleItem(itemId) {
     const card = document.querySelector(`.item-card[data-id="${itemId}"]`);
-    
-    if (selectedItems.has(itemId)) {
-        selectedItems.delete(itemId);
-        card.classList.remove('selected');
-    } else {
-        selectedItems.add(itemId);
-        card.classList.add('selected');
-    }
-    
+    if (selectedItems.has(itemId)) { selectedItems.delete(itemId); card.classList.remove('selected'); }
+    else { selectedItems.add(itemId); card.classList.add('selected'); }
     updateSearchButton();
 }
-
 function updateSearchButton() {
-    if (selectedItems.size > 0) {
-        searchBtn.disabled = false;
-        searchBtn.textContent = `Search Projects for ${selectedItems.size} Item${selectedItems.size > 1 ? 's' : ''} 🔍`;
-    } else {
-        searchBtn.disabled = true;
-        searchBtn.textContent = 'Select Items to Search 🔍';
-    }
+    if (selectedItems.size > 0) { searchBtn.disabled = false; searchBtn.textContent = `Search Projects for ${selectedItems.size} Item${selectedItems.size > 1 ? 's' : ''} 🔍`; }
+    else { searchBtn.disabled = true; searchBtn.textContent = 'Select Items to Search 🔍'; }
 }
-
-// Main Search Handler
 async function handleSearch() {
     if (selectedItems.size === 0) return;
-    
-    // UI: Show Loading State
-    searchBtn.disabled = true;
-    searchBtn.textContent = 'Searching APIs... ⏳';
+    searchBtn.disabled = true; searchBtn.textContent = 'Searching APIs... ⏳';
     resultsSection.hidden = false;
     resultsGrid.innerHTML = '<div class="loader">Searching global database for recycling projects...</div>';
     resultsSection.scrollIntoView({ behavior: 'smooth' });
-
-    // 1. Construct Query
     const query = constructSearchQuery();
-    
     try {
-        // 2. Fetch Data (Real or Mock)
         const videos = await fetchVideos(query);
-        
-        // 3. Display Results
         displayResults(videos);
     } catch (error) {
         console.error("Search failed:", error);
@@ -408,79 +203,38 @@ async function handleSearch() {
         updateSearchButton();
     }
 }
-
-// Logic: Construct a smart search query
 function constructSearchQuery() {
-    const itemNames = Array.from(selectedItems).map(id => {
-        return recyclableItems.find(i => i.id === id).name;
-    });
-    
-    // Example: "DIY recycled crafts using Plastic Bottle and Newspaper"
+    const itemNames = Array.from(selectedItems).map(id => recyclableItems.find(i => i.id === id).name);
     return `DIY recycled crafts using ${itemNames.join(' and ')}`;
 }
-
-// API: Fetch Videos
 async function fetchVideos(query) {
-    // Search using Cloudinary Tags
     const tags = Array.from(selectedItems).join(',');
-    
     try {
         const res = await fetch(`${API_BASE}/get-videos?tags=${tags}`);
         if (!res.ok) throw new Error('Search failed');
         const videos = await res.json();
-        
-        return videos.map(v => ({
-            videoUrl: v.url,
-            title: v.title,
-            description: v.description,
-            relatedItem: 'Community Result'
-        }));
+        return videos.map(v => ({ videoUrl: v.url, title: v.title, description: v.description, relatedItem: 'Community Result' }));
     } catch (err) {
         console.error('API Error:', err);
         return [];
     }
 }
-
-// Removed proxy-based search; purely community + curated examples
-
-// API: Mock Implementation (Smart Search)
-function mockApiSearch() {
-    return [];
-}
-
-async function searchLocalVideos() {
-    // Legacy function, no longer used
-    return [];
-}
-// Display Results
 function displayResults(results) {
     resultsGrid.innerHTML = '';
-    
-    if (results.length === 0) {
-        resultsGrid.innerHTML = '<p>No specific videos found for this combination. Try selecting fewer items!</p>';
-        return;
-    }
-
+    if (results.length === 0) { resultsGrid.innerHTML = '<p>No specific videos found for this combination. Try selecting fewer items!</p>'; return; }
     results.forEach(result => {
         const card = document.createElement('div');
         card.className = 'result-card';
-        
         card.innerHTML = `
-            <div class="video-container">
-                <video src="${result.videoUrl}" controls></video>
-            </div>
+            <div class="video-container"><video src="${result.videoUrl}" controls></video></div>
             <div class="result-content">
                 <h3>${result.title}</h3>
                 <p>${result.description}</p>
-                <div class="tag-container">
-                    <span class="result-tag">${result.relatedItem}</span>
-                </div>
+                <div class="tag-container"><span class="result-tag">${result.relatedItem}</span></div>
             </div>
         `;
-        
         resultsGrid.appendChild(card);
     });
 }
-
-// Start
-init();
+function onSubmitTutorial(e) { e.preventDefault(); publishWizard(); }
+document.addEventListener('DOMContentLoaded', init);
