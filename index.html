@@ -3,53 +3,82 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recycle-it | JLM ENSAM Casablanca</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+    <title>Recycle-it - Choose Version</title>
+    <style>
+        :root {
+            --primary: #2ecc71;
+            --secondary: #27ae60;
+            --dark: #2c3e50;
+            --light: #ecf0f1;
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .container {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            max-width: 600px;
+        }
+        h1 {
+            color: var(--dark);
+            margin-bottom: 2rem;
+        }
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+        .btn {
+            display: inline-block;
+            padding: 1.2rem 2rem;
+            text-decoration: none;
+            color: white;
+            font-weight: bold;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .btn-default {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+        }
+        .btn-test {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+        p {
+            color: #7f8c8d;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar">
-        <div class="logo">Recycle-it ♻️</div>
-        <div class="nav-links">
-            <a href="./search/">Search</a>
-            <a href="./upload/">Upload</a>
-        </div>
-    </nav>
-
-    <header class="hero">
-        <div class="hero-content">
-            <h1>Turn Waste into Wonder</h1>
-            <p class="subtitle">A project by JLM ENSAM Casablanca to promote recycling awareness and creativity.</p>
-            <p class="description">
-                We believe in a sustainable future. Through our activities and this platform, 
-                we help you find creative ways to repurpose everyday items. 
-                Don't throw it away—Recycle-it!
-            </p>
-            <a href="./search/" class="cta-button">Start Searching</a>
-        </div>
-    </header>
-
-    <main>
-        <section class="container">
-            <div class="section-header">
-                <h2>Explore</h2>
-                <p>Browse community tutorials or share your own.</p>
+    <div class="container">
+        <h1>Welcome to Recycle-it</h1>
+        <p>Please select a version:</p>
+        
+        <div class="btn-group">
+            <div>
+                <a href="default/" class="btn btn-default">Community Version (Default)</a>
+                <p><small>User uploads & Cloudinary storage</small></p>
             </div>
-            <div class="action-area">
-                <a class="cta-button" href="./search/">Search Tutorials</a>
-                <span style="margin:0 1rem;"></span>
-                <a class="cta-button" href="./upload/">Upload Tutorial</a>
+            
+            <div>
+                <a href="test/" class="btn btn-test">YouTube Version (Test)</a>
+                <p><small>Search YouTube API directly</small></p>
             </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>&copy; 2026 JLM ENSAM Casablanca. All rights reserved.</p>
-        <p>Making the world greener, one item at a time.</p>
-    </footer>
-
-    <script src="script.js"></script>
+        </div>
+    </div>
 </body>
 </html>
