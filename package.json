@@ -1,9 +1,0 @@
-{
-  "name": "reclable-backend",
-  "version": "1.0.0",
-  "description": "Backend functions for Reclable",
-  "main": "index.js",
-  "dependencies": {
-    "cloudinary": "^2.0.0"
-  }
-}
