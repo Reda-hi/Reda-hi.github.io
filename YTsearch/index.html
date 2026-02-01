@@ -4,24 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Recycle-it | YTsearch</title>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/YTsearch/style.css">
+  <style>
+    html, body { height: 100%; }
+    body { display: flex; flex-direction: column; min-height: 100vh; }
+    main { flex: 1; }
+    footer { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:1rem 0; margin-top:2rem; width:100%; }
+    footer p { margin:.25rem 0; }
+  </style>
 </head>
-<body>
-  <nav class="navbar">
-    <div class="logo">Recycle-it ♻️</div>
-    <div class="nav-links">
-      <a href="search/">Search</a>
-      <a href="../">Home</a>
+<body class="bg-slate-50">
+  <nav class="navbar max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+    <div class="logo text-brand font-semibold text-lg">Recycle-it ♻️</div>
+    <div class="nav-links flex items-center gap-6">
+      <a class="text-slate-700 hover:text-brand font-medium" href="search/">Search</a>
+      <a class="text-slate-700 hover:text-brand font-medium" href="../">Home</a>
     </div>
   </nav>
   <header class="hero">
-    <div class="hero-content">
-      <h1>YouTube Tutorials by Items</h1>
-      <p class="subtitle">Find recycling tutorials from YouTube by selecting your items.</p>
-      <a href="search/" class="cta-button">Start Searching</a>
+    <div class="hero-content max-w-6xl mx-auto px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold">YouTube Tutorials by Items</h1>
+      <p class="subtitle mt-3 text-white/90">Find recycling tutorials from YouTube by selecting your items.</p>
+      <a href="search/" class="cta-button mt-6">Start Searching</a>
     </div>
   </header>
   <footer>

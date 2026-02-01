@@ -4,38 +4,46 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Recycle-it | Community</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/community/style.css">
+    <style>
+      html, body { height: 100%; }
+      body { display: flex; flex-direction: column; min-height: 100vh; }
+      main { flex: 1; }
+      footer { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:1rem 0; margin-top:2rem; width:100%; }
+      footer p { margin:.25rem 0; }
+    </style>
 </head>
-<body>
-    <nav class="navbar">
-        <div class="logo">Recycle-it ♻️</div>
-        <div class="nav-links">
-            <a href="./search/">Search</a>
-            <a href="./upload/">Upload</a>
+<body class="bg-slate-50">
+    <nav class="navbar max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+        <div class="logo text-brand font-semibold text-lg">Recycle-it ♻️</div>
+        <div class="nav-links flex items-center gap-6">
+            <a class="text-slate-700 hover:text-brand font-medium" href="./search/">Search</a>
+            <a class="text-slate-700 hover:text-brand font-medium" href="./upload/">Upload</a>
         </div>
     </nav>
 
     <header class="hero">
-        <div class="hero-content">
-            <h1>Turn Waste into Wonder</h1>
-            <p class="subtitle">A project by JLM ENSAM Casablanca to promote recycling awareness and creativity.</p>
-            <p class="description">
+        <div class="hero-content max-w-6xl mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold">Turn Waste into Wonder</h1>
+            <p class="subtitle mt-3 text-slate-100/90">A project by JLM ENSAM Casablanca to promote recycling awareness and creativity.</p>
+            <p class="description mt-3 text-white/90">
                 We believe in a sustainable future. Through our activities and this platform, 
                 we help you find creative ways to repurpose everyday items. 
                 Don't throw it away—Recycle-it!
             </p>
-            <a href="./search/" class="cta-button">Start Searching</a>
+            <a href="./search/" class="cta-button mt-6">Start Searching</a>
         </div>
     </header>
 
     <main>
         <section class="container">
-            <div class="section-header">
-                <h2>Explore</h2>
-                <p>Browse community tutorials or share your own.</p>
+            <div class="section-header text-center">
+                <h2 class="text-3xl font-semibold text-brand">Explore</h2>
+                <p class="text-slate-600">Browse community tutorials or share your own.</p>
             </div>
             <div class="action-area">
                 <a class="cta-button" href="./search/">Search Tutorials</a>

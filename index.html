@@ -1,82 +1,65 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Recycle-it - Choose Version</title>
-    <style>
-        :root {
-            --primary: #2ecc71;
-            --secondary: #27ae60;
-            --dark: #2c3e50;
-            --light: #ecf0f1;
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recycle-it</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: { DEFAULT: '#27ae60', light: '#2ecc71', dark: '#1f8e4e' }
+          }
         }
-        body {
-            font-family: 'Poppins', sans-serif;
-            background-color: var(--light);
-            margin: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            text-align: center;
-        }
-        .container {
-            background: white;
-            padding: 3rem;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            max-width: 600px;
-        }
-        h1 {
-            color: var(--dark);
-            margin-bottom: 2rem;
-        }
-        .btn-group {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-        .btn {
-            display: inline-block;
-            padding: 1.2rem 2rem;
-            text-decoration: none;
-            color: white;
-            font-weight: bold;
-            border-radius: 50px;
-            transition: transform 0.3s, box-shadow 0.3s;
-        }
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-        .btn-default {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
-        }
-        .btn-test {
-            background: linear-gradient(135deg, #e74c3c, #c0392b);
-        }
-        p {
-            color: #7f8c8d;
-            margin-bottom: 0.5rem;
-        }
-    </style>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
-<body>
-    <div class="container">
-        <h1>Welcome to Recycle-it</h1>
-        <p>Please select a version:</p>
-        <div class="btn-group">
-            <div>
-                <a href="community/" class="btn btn-default">Community Version</a>
-                <p><small>User uploads & Cloudinary storage</small></p>
-            </div>
-            <div>
-                <a href="YTsearch/" class="btn btn-test">YouTube Search</a>
-                <p><small>Search YouTube API directly</small></p>
-            </div>
-        </div>
+<body class="min-h-screen bg-gradient-to-br from-brand-light to-brand-dark text-slate-900">
+  <header class="relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+      <div class="w-[120vw] h-[120vh] bg-white/10 rounded-full blur-3xl -rotate-12 -translate-x-10 -translate-y-24"></div>
     </div>
+    <nav class="relative z-10 max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
+      <div class="flex items-center gap-2 text-white font-semibold text-lg">
+        <span>Recycle-it</span><span>♻️</span>
+      </div>
+    </nav>
+    <div class="relative z-10 max-w-6xl mx-auto px-6 py-20 text-center text-white">
+      <h1 class="text-4xl md:text-6xl font-bold tracking-tight">Turn Waste into Wonder</h1>
+      <p class="mt-4 text-lg md:text-xl opacity-90">Find community tutorials or search YouTube for recycling projects.</p>
+      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+        <a href="/community/" class="group rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 p-6 md:p-8 text-left hover:bg-white/20 transition">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-semibold">Community Uploads</h2>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/20 group-hover:bg-white/30 transition">📤</span>
+          </div>
+          <p class="mt-3 text-white/90">Publish videos, tag items, and search community results (Cloudinary).</p>
+          <div class="mt-6 inline-flex items-center gap-2 text-white font-medium">
+            <span>Open</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+        </a>
+        <a href="/YTsearch/" class="group rounded-2xl bg-white/10 backdrop-blur-lg border border-white/20 p-6 md:p-8 text-left hover:bg-white/20 transition">
+          <div class="flex items-center justify-between">
+            <h2 class="text-2xl font-semibold">YouTube Search</h2>
+            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/20 group-hover:bg-white/30 transition">🔍</span>
+          </div>
+          <p class="mt-3 text-white/90">Find YouTube tutorials via serverless proxy. No uploads required.</p>
+          <div class="mt-6 inline-flex items-center gap-2 text-white font-medium">
+            <span>Open</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+            </svg>
+          </div>
+        </a>
+      </div>
+    </div>
+  </header>
 </body>
 </html>
