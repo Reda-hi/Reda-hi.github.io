@@ -44,6 +44,34 @@
             </div>
         </section>
 
+        <section id="submit-section" class="container">
+            <div class="section-header">
+                <h2>Share Your Tutorial</h2>
+                <p>Add your video and tag the items used so others can find it.</p>
+            </div>
+            <form id="tutorial-form" class="tutorial-form">
+                <div class="form-row">
+                    <label for="video-title">Title</label>
+                    <input id="video-title" type="text" required placeholder="Creative Planter from Plastic Bottles">
+                </div>
+                <div class="form-row">
+                    <label for="video-url">Video URL (YouTube)</label>
+                    <input id="video-url" type="url" required placeholder="https://www.youtube.com/watch?v=XXXXXXXXXXX">
+                </div>
+                <div class="form-row">
+                    <label for="video-desc">Description</label>
+                    <textarea id="video-desc" rows="3" placeholder="Brief description of the tutorial"></textarea>
+                </div>
+                <div class="form-row">
+                    <label>Tags (items used)</label>
+                    <div id="tags-grid" class="tags-grid"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="submit-btn">Publish Tutorial 📤</button>
+                </div>
+            </form>
+        </section>
+
         <section id="results-section" class="container" hidden>
             <div class="section-header">
                 <h2>Your Personalized Projects</h2>
@@ -56,11 +84,10 @@
     </main>
 
     <footer>
-        <p>&copy; 2024 JLM ENSAM Casablanca. All rights reserved.</p>
+        <p>&copy; 2026 JLM ENSAM Casablanca. All rights reserved.</p>
         <p>Making the world greener, one item at a time.</p>
     </footer>
 
-    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

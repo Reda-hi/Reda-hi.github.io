@@ -31,14 +31,7 @@ const recyclableItems = [
     { id: 'egg-shells', name: 'Egg Shells', icon: '🥚', category: 'Organic' },
     { id: 'wine-cork', name: 'Wine Cork', icon: '🍾', category: 'Other' }
 ];
-
-// API Configuration
-// We use the global ENV object from config.js to keep keys secure and git-ignored.
-const API_CONFIG = {
-    useRealApi: (typeof ENV !== 'undefined' && ENV.USE_REAL_API) || false,
-    apiKey: (typeof ENV !== 'undefined' && ENV.YOUTUBE_API_KEY) || 'YOUR_YOUTUBE_API_KEY',
-    endpoint: 'https://www.googleapis.com/youtube/v3/search'
-};
+// Community-driven: no external API configuration
 
 // "Mock API" Database - Simulates a massive search index
 // This handles single items AND combinations
@@ -142,17 +135,22 @@ const mockApiIndex = [
 
 // State
 const selectedItems = new Set();
+let userVideos = [];
 
 // DOM Elements
 const itemsGrid = document.getElementById('items-grid');
 const searchBtn = document.getElementById('search-btn');
 const resultsSection = document.getElementById('results-section');
 const resultsGrid = document.getElementById('results-grid');
+const tagsGrid = document.getElementById('tags-grid');
+const tutorialForm = document.getElementById('tutorial-form');
 
 // Initialize
 function init() {
     initItems();
     searchBtn.addEventListener('click', handleSearch);
+    initSubmission();
+    loadUserVideos();
 }
 
 // Initialize Items Grid
@@ -174,6 +172,70 @@ function initItems() {
     });
 }
 
+function initSubmission() {
+    if (tagsGrid) {
+        tagsGrid.innerHTML = '';
+        recyclableItems.forEach(item => {
+            const wrap = document.createElement('label');
+            wrap.className = 'tag-item';
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.value = item.id;
+            const text = document.createElement('span');
+            text.textContent = `${item.icon} ${item.name}`;
+            wrap.appendChild(checkbox);
+            wrap.appendChild(text);
+            tagsGrid.appendChild(wrap);
+        });
+    }
+    if (tutorialForm) {
+        tutorialForm.addEventListener('submit', onSubmitTutorial);
+    }
+}
+
+function onSubmitTutorial(e) {
+    e.preventDefault();
+    const title = document.getElementById('video-title').value.trim();
+    const url = document.getElementById('video-url').value.trim();
+    const desc = document.getElementById('video-desc').value.trim();
+    const tags = Array.from(tagsGrid.querySelectorAll('input[type="checkbox"]:checked')).map(c => c.value);
+    const videoId = extractYouTubeId(url);
+    if (!title || !url || !videoId || tags.length === 0) return;
+    const record = {
+        id: Date.now().toString(),
+        videoId,
+        title,
+        description: desc,
+        tags
+    };
+    userVideos.push(record);
+    localStorage.setItem('recycle_videos', JSON.stringify(userVideos));
+    tutorialForm.reset();
+}
+
+function loadUserVideos() {
+    try {
+        const raw = localStorage.getItem('recycle_videos');
+        userVideos = raw ? JSON.parse(raw) : [];
+    } catch {
+        userVideos = [];
+    }
+}
+
+function extractYouTubeId(url) {
+    try {
+        const u = new URL(url);
+        if (u.hostname.includes('youtube.com')) {
+            return u.searchParams.get('v');
+        }
+        if (u.hostname.includes('youtu.be')) {
+            return u.pathname.replace('/', '');
+        }
+        return '';
+    } catch {
+        return '';
+    }
+}
 // Toggle Item Selection
 function toggleItem(itemId) {
     const card = document.querySelector(`.item-card[data-id="${itemId}"]`);
@@ -242,26 +304,12 @@ async function fetchVideos(query) {
     // Simulate Network Delay for realism
     await new Promise(resolve => setTimeout(resolve, 1500));
 
-    if (API_CONFIG.useRealApi && API_CONFIG.apiKey !== 'YOUR_YOUTUBE_API_KEY') {
-        return await callRealYouTubeApi(query);
-    } else {
-        return mockApiSearch();
-    }
+    const local = searchLocalVideos();
+    if (local.length > 0) return local;
+    return mockApiSearch();
 }
 
-// API: Real Implementation (Future Proofing)
-async function callRealYouTubeApi(query) {
-    const url = `${API_CONFIG.endpoint}?part=snippet&maxResults=6&q=${encodeURIComponent(query)}&key=${API_CONFIG.apiKey}&type=video`;
-    const response = await fetch(url);
-    const data = await response.json();
-    
-    return data.items.map(item => ({
-        videoId: item.id.videoId,
-        title: item.snippet.title,
-        description: item.snippet.description,
-        relatedItem: 'Search Result'
-    }));
-}
+// Removed proxy-based search; purely community + curated examples
 
 // API: Mock Implementation (Smart Search)
 function mockApiSearch() {
@@ -308,6 +356,17 @@ function mockApiSearch() {
     return results;
 }
 
+function searchLocalVideos() {
+    const ids = Array.from(selectedItems);
+    if (ids.length === 0) return [];
+    const matches = userVideos.filter(v => ids.every(t => v.tags.includes(t)));
+    return matches.map(v => ({
+        videoId: v.videoId,
+        title: v.title,
+        description: v.description || '',
+        relatedItem: 'Community'
+    }));
+}
 // Display Results
 function displayResults(results) {
     resultsGrid.innerHTML = '';

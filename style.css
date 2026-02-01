@@ -160,6 +160,75 @@ body {
     box-shadow: var(--shadow);
 }
 
+#submit-section {
+    margin-top: 2rem;
+}
+
+.tutorial-form {
+    background: var(--card-bg);
+    padding: 2rem;
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.form-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.form-row label {
+    font-weight: 600;
+    color: var(--secondary-color);
+}
+
+.form-row input,
+.form-row textarea {
+    padding: 0.75rem 1rem;
+    border: 1px solid #e0e0e0;
+    border-radius: 10px;
+    outline: none;
+    font-size: 1rem;
+}
+
+.form-row input:focus,
+.form-row textarea:focus {
+    border-color: var(--primary-color);
+}
+
+.tags-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.75rem;
+}
+
+.tag-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: #f8faf8;
+    border: 1px solid #e9f5ee;
+    padding: 0.6rem 0.8rem;
+    border-radius: 10px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+#submit-btn {
+    background-color: var(--accent-color);
+    color: #2c3e50;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+}
+
 #search-btn {
     background-color: var(--primary-color);
     color: white;
