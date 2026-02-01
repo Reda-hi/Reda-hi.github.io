@@ -11,13 +11,23 @@
     <link rel="stylesheet" href="/community/style.css">
 </head>
 <body class="bg-slate-50">
-    <nav class="navbar max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <div class="logo text-brand font-semibold text-lg">Recycle-it ♻️</div>
-        <div class="nav-links flex items-center gap-6">
-            <a class="text-slate-700 hover:text-brand font-medium" href="../search/">Search</a>
-            <a class="text-slate-700 hover:text-brand font-medium" href="../upload/">Upload</a>
+    <style>
+        .glass-nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,.7);border-bottom:1px solid rgba(15,23,42,.08);transition:background .25s ease,box-shadow .25s ease}
+        .glass-nav .container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:64px}
+        .glass-nav .links{display:flex;gap:1rem}
+        .glass-nav .links a{text-decoration:none;padding:8px 14px;border-radius:999px;color:#0f172a}
+        .glass-nav .links a:hover{background:rgba(15,23,42,.06)}
+        .glass-nav.scrolled{box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    </style>
+    <header class="glass-nav">
+        <div class="container">
+            <div class="logo text-brand font-semibold text-lg">Recycle-it ♻️</div>
+            <div class="links">
+                <a href="../search/">Search</a>
+                <a href="../upload/">Upload</a>
+            </div>
         </div>
-    </nav>
+    </header>
     <header class="hero">
         <div class="hero-content max-w-6xl mx-auto px-6 text-center">
             <h1 class="text-4xl md:text-5xl font-bold">Share Your Tutorial</h1>
@@ -95,5 +105,8 @@
         <p>Making the world greener, one item at a time.</p>
     </footer>
     <script src="/community/script.js"></script>
+    <script>
+        const nv=document.querySelector('.glass-nav');window.addEventListener('scroll',()=>{const y=window.scrollY;if(y>8){nv.classList.add('scrolled')}else{nv.classList.remove('scrolled')}})
+    </script>
 </body>
 </html>

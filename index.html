@@ -19,6 +19,26 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 <body class="min-h-screen bg-gradient-to-br from-brand-light to-brand-dark text-slate-900">
+  <style>
+    .glass-nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.18);transition:background .25s ease,box-shadow .25s ease,transform .25s}
+    .glass-nav .container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:64px}
+    .glass-nav .logo{color:#fff;font-weight:600;font-size:1.125rem;display:flex;gap:.5rem;align-items:center}
+    .glass-nav .links{display:flex;gap:1rem}
+    .glass-nav .links a{color:#fff;text-decoration:none;padding:8px 14px;border-radius:999px;transition:background .2s ease,color .2s ease}
+    .glass-nav .links a:hover{background:rgba(255,255,255,.18)}
+    .glass-nav.scrolled{background:rgba(255,255,255,.9);box-shadow:0 10px 30px rgba(0,0,0,.08)}
+    .glass-nav.scrolled .logo{color:#0f172a}
+    .glass-nav.scrolled .links a{color:#0f172a}
+  </style>
+  <header class="glass-nav">
+    <div class="container">
+      <div class="logo"><span>Recycle-it</span><span>♻️</span></div>
+      <div class="links">
+        <a href="/community/">Community</a>
+        <a href="/YTsearch/">YTsearch</a>
+      </div>
+    </div>
+  </header>
   <header class="relative overflow-hidden">
     <div class="absolute inset-0 opacity-20">
       <div class="w-[120vw] h-[120vh] bg-white/10 rounded-full blur-3xl -rotate-12 -translate-x-10 -translate-y-24"></div>
@@ -61,5 +81,8 @@
       </div>
     </div>
   </header>
+  <script>
+    const nv=document.querySelector('.glass-nav');window.addEventListener('scroll',()=>{const y=window.scrollY;if(y>8){nv.classList.add('scrolled')}else{nv.classList.remove('scrolled')}})
+  </script>
 </body>
 </html>
