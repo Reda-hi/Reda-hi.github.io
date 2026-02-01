@@ -48,14 +48,28 @@ exports.handler = async function(event, context) {
       .with_field('context')
       .execute();
 
-    const videos = result.resources.map(res => ({
-      id: res.public_id,
-      title: res.context?.custom?.title || 'Untitled',
-      description: res.context?.custom?.description || '',
-      tags: res.tags || [],
-      url: res.secure_url,
-      thumbnail: res.secure_url.replace(/\.[^/.]+$/, ".jpg")
-    }));
+    const videos = result.resources.map(res => {
+      const ctx = res.context || {};
+      const custom = ctx.custom || {};
+      const title =
+        custom.title ||
+        ctx.caption ||
+        res.original_filename ||
+        res.public_id ||
+        'Untitled';
+      const description =
+        custom.description ||
+        ctx.alt ||
+        '';
+      return {
+        id: res.public_id,
+        title,
+        description,
+        tags: res.tags || [],
+        url: res.secure_url,
+        thumbnail: res.secure_url.replace(/\.[^/.]+$/, ".jpg")
+      };
+    });
 
     return {
       statusCode: 200,

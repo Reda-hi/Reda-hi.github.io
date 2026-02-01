@@ -35,7 +35,7 @@ exports.handler = async function(event, context) {
     // Sanitize to avoid breaking the pipe format
     const cleanTitle = (title || '').replace(/\|/g, '-');
     const cleanDesc = (description || '').replace(/\|/g, '-');
-    const contextStr = `title=${cleanTitle}|description=${cleanDesc}`;
+    const contextStr = `title=${cleanTitle}|description=${cleanDesc}|caption=${cleanTitle}|alt=${cleanDesc}`;
 
     const params = {
       timestamp: timestamp,
