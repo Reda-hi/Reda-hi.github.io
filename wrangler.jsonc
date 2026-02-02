@@ -1,5 +1,5 @@
 {
-  "name": "reclable-backend",
+  "name": "r3cycl3it",
   "compatibility_date": "2026-02-02",
   "main": "cloudflare/worker.js"
 }
