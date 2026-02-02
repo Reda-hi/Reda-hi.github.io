@@ -1,4 +1,4 @@
-const DEFAULT_API_BASE = 'https://reclable-backend.amaaliredhmed872.workers.dev';
+const DEFAULT_API_BASE = 'https://r3cycl3it.amaaliredhmed872.workers.dev';
 const storedApiBase = localStorage.getItem('api_base');
 const API_BASE = window.BACKEND_BASE || (storedApiBase && storedApiBase.startsWith('http') ? storedApiBase : DEFAULT_API_BASE);
 const recyclableItems = [
