@@ -1,4 +1,4 @@
-const API_BASE = '/.netlify/functions';
+const API_BASE = window.BACKEND_BASE || localStorage.getItem('api_base') || 'https://reclable-backend.amaaliredhmed872.workers.dev';
 
 const recyclableItems = [
     { id: 'plastic-bottle', name: 'Plastic Bottle', icon: '🥤', category: 'Plastic' },
