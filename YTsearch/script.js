@@ -1,4 +1,6 @@
-const API_BASE = window.BACKEND_BASE || localStorage.getItem('api_base') || 'https://reclable-backend.amaaliredhmed872.workers.dev';
+const DEFAULT_API_BASE = 'https://reclable-backend.amaaliredhmed872.workers.dev';
+const storedApiBase = localStorage.getItem('api_base');
+const API_BASE = window.BACKEND_BASE || (storedApiBase && storedApiBase.startsWith('http') ? storedApiBase : DEFAULT_API_BASE);
 
 const recyclableItems = [
     { id: 'plastic-bottle', name: 'Plastic Bottle', icon: '🥤', category: 'Plastic' },
@@ -114,7 +116,14 @@ function constructQuery() {
 }
 
 async function fetchVideos(query) {
-    const response = await fetch(`${API_BASE}/get-youtube-videos?q=${encodeURIComponent(query)}`);
+    const url = `${API_BASE}/get-youtube-videos?q=${encodeURIComponent(query)}`;
+    let response = await fetch(url);
+    if (!response.ok && response.status === 404 && API_BASE !== DEFAULT_API_BASE) {
+        response = await fetch(`${DEFAULT_API_BASE}/get-youtube-videos?q=${encodeURIComponent(query)}`);
+        if (response.ok) {
+            localStorage.setItem('api_base', DEFAULT_API_BASE);
+        }
+    }
     if (!response.ok) {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
