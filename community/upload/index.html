@@ -6,47 +6,40 @@
     <title>Recycle-it | Community Upload</title>
     <meta name="description" content="Upload your recycling tutorial and tag items so others can find and learn.">
     <meta name="keywords" content="recycling upload, share tutorial, upcycling, DIY, community">
-    <meta name="theme-color" content="#27ae60">
+    <meta name="theme-color" content="#0f766e">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/community/style.css">
 </head>
-<body class="bg-slate-50">
-    <style>
-        .glass-nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,.7);border-bottom:1px solid rgba(15,23,42,.08);transition:background .25s ease,box-shadow .25s ease}
-        .glass-nav .container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;min-height:64px}
-        .glass-nav .links{display:flex;gap:1rem}
-        .glass-nav .links a{text-decoration:none;padding:8px 14px;border-radius:999px;color:#0f172a}
-        .glass-nav .links a:hover{background:rgba(15,23,42,.06)}
-        .glass-nav.scrolled{box-shadow:0 10px 30px rgba(0,0,0,.08)}
-    </style>
-    <header class="glass-nav">
-        <div class="container">
-            <div class="logo text-brand font-semibold text-lg">Recycle-it ♻️</div>
-            <div class="links">
-                <a href="/">Home</a>
-                <a href="../search/">Search</a>
-                <a href="../upload/">Upload</a>
-            </div>
+<body>
+    <header class="navbar">
+        <div class="logo">
+            <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary-600), var(--primary-700)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1rem;">♻️</div>
+            <span>Recycle-it</span>
+        </div>
+        <div class="nav-links">
+            <a href="/">Home</a>
+            <a href="/community/">Community</a>
+            <a href="/community/search/">Search</a>
+            <a href="/community/upload/">Upload</a>
         </div>
     </header>
     <header class="hero">
-        <div class="hero-content max-w-6xl mx-auto px-6 text-center">
-            <h1 class="text-4xl md:text-5xl font-bold">Share Your Tutorial</h1>
-            <p class="subtitle mt-3 text-white/90">Add your video and tag the items used so others can find it.</p>
-            <a href="#submit-section" class="cta-button mt-6">Start Uploading</a>
-        </div>
+        <h1>Share Your Tutorial</h1>
+        <p>Add your video and tag the items used so others can find it.</p>
+        <a href="#submit-section" class="cta-button" style="margin-top: 2rem;">Start Uploading</a>
     </header>
     <main>
-        <section class="container">
-            <div class="section-header text-center">
-                <h2 class="text-3xl font-semibold text-brand">Publish a Tutorial</h2>
-                <p class="text-slate-600">Walk through steps to upload, describe, tag, and publish.</p>
-            </div>
+        <section class="container" style="margin-top: -2rem; position: relative; z-index: 10;">
             <div class="wizard">
+                <div class="section-header text-center" style="margin-bottom: 3rem;">
+                    <h2>Publish a Tutorial</h2>
+                    <p style="color: var(--neutral-500);">Walk through steps to upload, describe, tag, and publish.</p>
+                </div>
+                
                 <div class="wizard-steps">
                     <div class="wizard-step active" data-step="1">Upload</div>
                     <div class="wizard-step" data-step="2">Details</div>
@@ -64,36 +57,43 @@
                                 <input id="video-file" type="file" accept="video/*" hidden>
                             </div>
                         </div>
-                        <div id="preview" class="preview" hidden>
-                            <video id="preview-video" controls style="aspect-ratio:16/9; width:100%; max-width:640px;"></video>
+                        <div id="preview" class="preview" hidden style="margin-top: 2rem; border-radius: 1rem; overflow: hidden; box-shadow: var(--shadow-lg);">
+                            <video id="preview-video" controls style="width:100%; display: block; background: #000;"></video>
                         </div>
                     </div>
                     <div class="wizard-panel" data-step="2" hidden>
                         <div class="form-row">
                             <label for="video-title">Title</label>
-                            <input id="video-title" type="text" placeholder="Creative Planter from Plastic Bottles">
+                            <input id="video-title" type="text" placeholder="e.g., Creative Planter from Plastic Bottles">
                         </div>
                         <div class="form-row">
                             <label for="video-desc">Description</label>
-                            <textarea id="video-desc" rows="3" placeholder="Brief description of the tutorial"></textarea>
+                            <textarea id="video-desc" rows="4" placeholder="Briefly describe the recycling steps..."></textarea>
                         </div>
                     </div>
                     <div class="wizard-panel" data-step="3" hidden>
-                        <label>Tags (items used)</label>
-                        <div id="tags-grid" class="tags-grid"></div>
+                        <div class="form-row">
+                            <label>Tags (items used)</label>
+                            <p style="font-size: 0.875rem; color: var(--neutral-500); margin-bottom: 1rem;">Select the materials you used in this tutorial.</p>
+                            <div id="tags-grid" class="items-grid" style="grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));"></div>
+                        </div>
                     </div>
                     <div class="wizard-panel" data-step="4" hidden>
-                        <div class="summary">
+                        <div class="summary" style="text-align: center; padding: 2rem;">
+                            <div style="font-size: 4rem; margin-bottom: 1.5rem;">✨</div>
                             <h3>Ready to publish</h3>
-                            <p>Review your info and press Publish.</p>
-
+                            <p style="color: var(--neutral-600); margin-bottom: 2rem;">Review your info and press Publish to share with the community.</p>
+                            
+                            <div id="publish-summary" class="status-success" style="text-align: left; margin-top: 1rem;">
+                                Your tutorial is ready for the world!
+                            </div>
                         </div>
                     </div>
                 </div>
                 <div class="wizard-actions">
                     <button id="back-btn" type="button" class="secondary-button" disabled>Back</button>
-                    <button id="next-btn" type="button" class="cta-button">Next</button>
-                    <button id="publish-btn" type="button" class="cta-button" hidden>Publish 📤</button>
+                    <button id="next-btn" type="button" class="cta-button">Next Step</button>
+                    <button id="publish-btn" type="button" class="cta-button" hidden>Publish Tutorial 📤</button>
                 </div>
                 <form id="tutorial-form" hidden></form>
             </div>
@@ -105,7 +105,14 @@
     </footer>
     <script src="/community/script.js"></script>
     <script>
-        const nv=document.querySelector('.glass-nav');window.addEventListener('scroll',()=>{const y=window.scrollY;if(y>8){nv.classList.add('scrolled')}else{nv.classList.remove('scrolled')}})
+        const nv = document.querySelector('.navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 10) {
+                nv.classList.add('scrolled');
+            } else {
+                nv.classList.remove('scrolled');
+            }
+        });
     </script>
 </body>
 </html>

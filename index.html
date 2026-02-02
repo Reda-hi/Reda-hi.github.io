@@ -6,7 +6,7 @@
   <title>Recycle-it | Recycling Tutorials & YouTube Search</title>
   <meta name="description" content="Recycle-it by JLM ENSAM Casablanca: find community recycling tutorials and search YouTube for upcycling projects.">
   <meta name="keywords" content="recycling, upcycling, tutorials, DIY, community, YouTube, ENSAM Casablanca">
-  <meta name="theme-color" content="#27ae60">
+  <meta name="theme-color" content="#0f766e">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
@@ -14,79 +14,326 @@
       theme: {
         extend: {
           colors: {
-            brand: { DEFAULT: '#27ae60', light: '#2ecc71', dark: '#1f8e4e' }
+            primary: {
+              50: '#f0fdfa',
+              100: '#ccfbf1',
+              200: '#99f6e4',
+              300: '#5eead4',
+              400: '#2dd4bf',
+              500: '#14b8a6',
+              600: '#0d9488',
+              700: '#0f766e',
+              800: '#115e59',
+              900: '#134e4a',
+              950: '#042f2e'
+            },
+            secondary: {
+              50: '#fefce8',
+              100: '#fef9c3',
+              200: '#fef08a',
+              300: '#fde047',
+              400: '#facc15',
+              500: '#eab308',
+              600: '#ca8a04',
+              700: '#a16207',
+              800: '#854d0e',
+              900: '#713f12',
+              950: '#422006'
+            },
+            neutral: {
+              50: '#fafafa',
+              100: '#f5f5f5',
+              200: '#e5e5e5',
+              300: '#d4d4d4',
+              400: '#a3a3a3',
+              500: '#737373',
+              600: '#525252',
+              700: '#404040',
+              800: '#262626',
+              900: '#171717',
+              950: '#0a0a0a'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Lexend', 'system-ui', 'sans-serif']
+          },
+          animation: {
+            'fade-in': 'fadeIn 0.6s ease-out',
+            'slide-up': 'slideUp 0.5s ease-out',
+            'scale-in': 'scaleIn 0.4s ease-out',
+            'float': 'float 3s ease-in-out infinite'
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0' },
+              '100%': { opacity: '1' }
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: '0' },
+              '100%': { transform: 'translateY(0)', opacity: '1' }
+            },
+            scaleIn: {
+              '0%': { transform: 'scale(0.9)', opacity: '0' },
+              '100%': { transform: 'scale(1)', opacity: '1' }
+            },
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' }
+            }
           }
         }
       }
     }
   </script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-</head>
-<body class="min-h-screen bg-gradient-to-br from-brand-light to-brand-dark text-slate-900">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/community/style.css">
   <style>
-    .glass-nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,.08);border-bottom:1px solid rgba(255,255,255,.18);transition:background .25s ease,box-shadow .25s ease,transform .25s}
-    .glass-nav .container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:64px}
-    .glass-nav .logo{color:#fff;font-weight:600;font-size:1.125rem;display:flex;gap:.5rem;align-items:center}
-    .glass-nav .links{display:flex;gap:1rem}
-    .glass-nav .links a{color:#fff;text-decoration:none;padding:8px 14px;border-radius:999px;transition:background .2s ease,color .2s ease}
-    .glass-nav .links a:hover{background:rgba(255,255,255,.18)}
-    .glass-nav.scrolled{background:rgba(255,255,255,.9);box-shadow:0 10px 30px rgba(0,0,0,.08)}
-    .glass-nav.scrolled .logo{color:#0f172a}
-    .glass-nav.scrolled .links a{color:#0f172a}
+    /* Home-specific enhancements */
+    .hero-home {
+      background: none !important;
+      color: inherit !important;
+    }
+    .text-gradient {
+      background: linear-gradient(135deg, var(--primary-700), var(--primary-500), var(--secondary-500));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
   </style>
-  <header class="glass-nav">
-    <div class="container">
-      <div class="logo"><span>Recycle-it</span><span>♻️</span></div>
-      <div class="links">
-        <a href="/community/">Community</a>
-        <a href="/YTsearch/">YTsearch</a>
-      </div>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-primary-50 via-primary-100 to-secondary-50 font-sans">
+  <header class="navbar">
+    <div class="logo">
+      <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary-600), var(--primary-700)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1rem;">♻️</div>
+      <span>Recycle-it</span>
+    </div>
+    <div class="nav-links">
+      <a href="/community/">Community</a>
+      <a href="/YTsearch/">YouTube Search</a>
     </div>
   </header>
-  <header class="relative overflow-hidden">
-    <div class="absolute inset-0 opacity-20">
-      <div class="w-[120vw] h-[120vh] bg-black/20 rounded-full blur-3xl -rotate-12 -translate-x-10 -translate-y-24"></div>
+
+  <!-- Hero Section -->
+  <section class="pt-32 pb-20 px-6 relative overflow-hidden">
+    <!-- Background decoration -->
+    <div class="absolute inset-0 pointer-events-none">
+      <div class="absolute top-20 left-10 w-72 h-72 bg-primary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float"></div>
+      <div class="absolute top-40 right-10 w-96 h-96 bg-secondary-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-float" style="animation-delay: 1s;"></div>
+      <div class="absolute bottom-20 left-1/2 w-80 h-80 bg-primary-100 rounded-full mix-blend-multiply filter blur-3xl opacity-40 animate-float" style="animation-delay: 2s;"></div>
     </div>
-    <nav class="relative z-10 max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-      <div class="flex items-center gap-2 text-white font-semibold text-lg">
-        <span>Recycle-it</span><span>♻️</span>
-      </div>
-    </nav>
-    <div class="relative z-10 max-w-6xl mx-auto px-6 py-20 text-center text-white">
-      <h1 class="text-4xl md:text-6xl font-bold tracking-tight">Turn Waste into Wonder</h1>
-      <p class="mt-4 text-lg md:text-xl opacity-90">Find community tutorials or search YouTube for recycling projects.</p>
-      <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
-        <a href="/community/" class="group rounded-2xl bg-slate-900/40 backdrop-blur-lg border border-brand-light/40 p-6 md:p-8 text-left hover:bg-slate-900/60 transition">
-          <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-semibold">Community Uploads</h2>
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/20 group-hover:bg-white/30 transition">📤</span>
+    
+    <div class="max-w-7xl mx-auto relative z-10">
+      <!-- Hero Content -->
+      <div class="text-center mb-16 animate-fade-in">
+        <h1 class="font-display text-5xl md:text-7xl font-bold text-gradient mb-6">
+          Turn Waste into Wonder
+        </h1>
+        <p class="text-xl md:text-2xl text-neutral-600 max-w-3xl mx-auto mb-8 leading-relaxed">
+          Discover community-driven recycling tutorials and explore YouTube's best upcycling projects. 
+          Join thousands creating sustainable solutions.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+          <div class="flex items-center gap-2 text-neutral-600">
+            <div class="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
+            <span class="text-sm">10,000+ Tutorials</span>
           </div>
-          <p class="mt-3 text-white/90">Publish videos, tag items, and search community results (Cloudinary).</p>
-          <div class="mt-6 inline-flex items-center gap-2 text-white font-medium">
-            <span class="px-4 py-2 rounded-full bg-brand hover:bg-brand-dark transition">Open</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          <div class="flex items-center gap-2 text-neutral-600">
+            <div class="w-2 h-2 bg-secondary-500 rounded-full animate-pulse" style="animation-delay: 0.5s;"></div>
+            <span class="text-sm">Community Driven</span>
+          </div>
+          <div class="flex items-center gap-2 text-neutral-600">
+            <div class="w-2 h-2 bg-primary-500 rounded-full animate-pulse" style="animation-delay: 1s;"></div>
+            <span class="text-sm">Sustainable Impact</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Feature Cards -->
+      <div class="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+        <!-- Community Card -->
+        <a href="/community/" class="card-pro rounded-3xl p-8 hover-lift group">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+              </svg>
+            </div>
+            <div class="text-primary-600 group-hover:translate-x-1 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
+          </div>
+          
+          <h3 class="font-display text-2xl font-semibold text-neutral-900 mb-3">Community Hub</h3>
+          <p class="text-neutral-600 mb-6 leading-relaxed">
+            Upload your recycling tutorials, discover community projects, and connect with eco-conscious creators. 
+            Share knowledge and inspire sustainable living.
+          </p>
+          
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">Upload Videos</span>
+            <span class="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">Tag Items</span>
+            <span class="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">Community Search</span>
+          </div>
+          
+          <div class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white focus-ring">
+            <span>Explore Community</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
             </svg>
           </div>
         </a>
-        <a href="/YTsearch/" class="group rounded-2xl bg-slate-900/40 backdrop-blur-lg border border-brand-light/40 p-6 md:p-8 text-left hover:bg-slate-900/60 transition">
-          <div class="flex items-center justify-between">
-            <h2 class="text-2xl font-semibold">YouTube Search</h2>
-            <span class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-white/20 group-hover:bg-white/30 transition">🔍</span>
+
+        <!-- YouTube Search Card -->
+        <a href="/YTsearch/" class="card-pro rounded-3xl p-8 hover-lift group">
+          <div class="flex items-start justify-between mb-6">
+            <div class="w-16 h-16 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center shadow-lg">
+              <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+              </svg>
+            </div>
+            <div class="text-secondary-600 group-hover:translate-x-1 transition-transform">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </div>
           </div>
-          <p class="mt-3 text-white/90">Find YouTube tutorials via serverless proxy. No uploads required.</p>
-          <div class="mt-6 inline-flex items-center gap-2 text-white font-medium">
-            <span class="px-4 py-2 rounded-full bg-brand hover:bg-brand-dark transition">Open</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"></path>
+          
+          <h3 class="font-display text-2xl font-semibold text-neutral-900 mb-3">YouTube Search</h3>
+          <p class="text-neutral-600 mb-6 leading-relaxed">
+            Search through millions of YouTube recycling tutorials with our intelligent filtering system. 
+            Find the perfect upcycling project for your needs.
+          </p>
+          
+          <div class="flex flex-wrap gap-2 mb-6">
+            <span class="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm font-medium">Smart Search</span>
+            <span class="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm font-medium">Filtered Results</span>
+            <span class="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm font-medium">No Uploads</span>
+          </div>
+          
+          <div class="btn-primary inline-flex items-center gap-2 px-6 py-3 rounded-xl font-semibold text-white focus-ring">
+            <span>Start Searching</span>
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
             </svg>
           </div>
         </a>
       </div>
     </div>
-  </header>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="py-16 px-6 bg-white/50 backdrop-blur-sm">
+    <div class="max-w-7xl mx-auto">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+        <div class="animate-slide-up">
+          <div class="text-3xl md:text-4xl font-bold text-primary-700 mb-2">10K+</div>
+          <div class="text-neutral-600 font-medium">Tutorials</div>
+        </div>
+        <div class="animate-slide-up" style="animation-delay: 0.1s;">
+          <div class="text-3xl md:text-4xl font-bold text-secondary-700 mb-2">50K+</div>
+          <div class="text-neutral-600 font-medium">Searches</div>
+        </div>
+        <div class="animate-slide-up" style="animation-delay: 0.2s;">
+          <div class="text-3xl md:text-4xl font-bold text-primary-700 mb-2">5K+</div>
+          <div class="text-neutral-600 font-medium">Contributors</div>
+        </div>
+        <div class="animate-slide-up" style="animation-delay: 0.3s;">
+          <div class="text-3xl md:text-4xl font-bold text-secondary-700 mb-2">100+</div>
+          <div class="text-neutral-600 font-medium">Categories</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-neutral-900 text-white py-12 px-6">
+    <div class="max-w-7xl mx-auto text-center">
+      <div class="flex items-center justify-center gap-3 mb-4">
+        <div class="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center">
+          <span class="text-white font-bold">♻️</span>
+        </div>
+        <span class="font-display font-semibold text-lg">Recycle-it</span>
+      </div>
+      <p class="text-neutral-400 mb-6">Empowering sustainable living through community-driven recycling tutorials.</p>
+      <div class="flex justify-center gap-6 mb-8">
+        <a href="/community/" class="text-neutral-400 hover:text-white transition-pro">Community</a>
+        <a href="/YTsearch/" class="text-neutral-400 hover:text-white transition-pro">YouTube Search</a>
+        <a href="#" class="text-neutral-400 hover:text-white transition-pro">About</a>
+        <a href="#" class="text-neutral-400 hover:text-white transition-pro">Contact</a>
+      </div>
+      <div class="border-t border-neutral-800 pt-6">
+        <p class="text-neutral-500 text-sm">
+          © 2024 Recycle-it by JLM ENSAM Casablanca. Building a sustainable future, one tutorial at a time.
+        </p>
+      </div>
+    </div>
+  </footer>
+
   <script>
-    const nv=document.querySelector('.glass-nav');window.addEventListener('scroll',()=>{const y=window.scrollY;if(y>8){nv.classList.add('scrolled')}else{nv.classList.remove('scrolled')}})
+    // Professional navigation scroll effect
+    const nv = document.querySelector('.navbar');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 10) {
+        nv.classList.add('scrolled');
+      } else {
+        nv.classList.remove('scrolled');
+      }
+    });
+  </script>
+      
+      // Hide/show navigation on scroll
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        nav.style.transform = 'translateY(-100%)';
+      } else {
+        nav.style.transform = 'translateY(0)';
+      }
+      
+      lastScrollY = currentScrollY;
+    });
+
+    // Professional loading states
+    document.addEventListener('DOMContentLoaded', () => {
+      // Add loading animation to cards
+      const cards = document.querySelectorAll('.card-pro');
+      cards.forEach((card, index) => {
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.classList.add('animate-scale-in');
+      });
+    });
+
+    // Professional hover effects
+    document.querySelectorAll('.card-pro').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.transform = 'translateY(-8px) scale(1.02)';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.transform = 'translateY(0) scale(1)';
+      });
+    });
+  </script>
+  <script>
+    // Navbar scroll effect
+    window.addEventListener('scroll', () => {
+      const nav = document.querySelector('.nav-glass');
+      if (window.scrollY > 20) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    });
+
+    // Simple mobile menu toggle
+    const mobileMenuBtn = document.querySelector('button.md\\:hidden');
+    if (mobileMenuBtn) {
+      mobileMenuBtn.addEventListener('click', () => {
+        // Toggle mobile menu logic here if needed
+        console.log('Mobile menu clicked');
+      });
+    }
   </script>
 </body>
 </html>

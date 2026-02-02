@@ -111,48 +111,225 @@ function initWizard() {
     goStep(1);
 }
 function setFile(file) {
+    if (!file || !file.type.startsWith('video/')) {
+        alert('Please select a valid video file.');
+        return;
+    }
+    
+    // Revoke old URL if exists to prevent memory leaks
+    if (currentFile && previewVideo.src) {
+        URL.revokeObjectURL(previewVideo.src);
+    }
+
     currentFile = file;
     const url = URL.createObjectURL(file);
+    
     if (previewWrap && previewVideo) {
         previewWrap.hidden = false;
         previewVideo.src = url;
+        previewVideo.load();
+    }
+
+    if (dropzone) {
+        const inner = dropzone.querySelector('.dropzone-inner');
+        if (inner) {
+            inner.innerHTML = `
+                <div class="dz-icon" style="color: var(--primary-500);">✅</div>
+                <div class="dz-title" style="color: var(--primary-700);">Video Selected</div>
+                <div class="dz-sub" style="margin-bottom: 1.5rem;">${file.name} (${(file.size / (1024 * 1024)).toFixed(2)} MB)</div>
+                <div class="flex gap-3 justify-center">
+                    <button id="change-file" type="button" class="secondary-button">Change</button>
+                    <button id="remove-file" type="button" class="secondary-button" style="border-color: #fee2e2; color: #dc2626;">Remove</button>
+                </div>
+            `;
+            
+            document.getElementById('change-file').onclick = (e) => {
+                e.stopPropagation();
+                videoFileInput.click();
+            };
+            
+            document.getElementById('remove-file').onclick = (e) => {
+                e.stopPropagation();
+                removeFile();
+            };
+        }
+        dropzone.classList.add('active');
     }
 }
+
+function removeFile() {
+    if (previewVideo.src) {
+        URL.revokeObjectURL(previewVideo.src);
+    }
+    currentFile = null;
+    videoFileInput.value = '';
+    
+    if (previewWrap) previewWrap.hidden = true;
+    if (previewVideo) previewVideo.src = '';
+    
+    if (dropzone) {
+        const inner = dropzone.querySelector('.dropzone-inner');
+        if (inner) {
+            inner.innerHTML = `
+                <div class="dz-icon">📹</div>
+                <div class="dz-title">Drag & drop your video here</div>
+                <div class="dz-sub">or</div>
+                <button id="choose-file" type="button" class="cta-button">Choose a file</button>
+            `;
+            document.getElementById('choose-file').onclick = () => videoFileInput.click();
+        }
+        dropzone.classList.remove('active');
+    }
+}
+
 function goStep(n) {
     if (n < 1) n = 1;
     if (n > 4) n = 4;
-    if (n === 2 && !currentFile) return;
-    if (n === 4) { nextBtn.hidden = true; publishBtn.hidden = false; }
-    else { nextBtn.hidden = false; publishBtn.hidden = true; }
+    
+    // Validation before moving forward
+    if (n > currentStep) {
+        if (currentStep === 1 && !currentFile) {
+            alert('Please upload a video first.');
+            return;
+        }
+        if (currentStep === 2) {
+            const title = document.getElementById('video-title')?.value.trim();
+            if (!title) {
+                alert('Please provide a title for your tutorial.');
+                return;
+            }
+        }
+        if (currentStep === 3) {
+            const tags = Array.from(tagsGrid.querySelectorAll('input[type="checkbox"]:checked'));
+            if (tags.length === 0) {
+                alert('Please select at least one material tag.');
+                return;
+            }
+        }
+    }
+
+    if (n === 4) { 
+        nextBtn.hidden = true; 
+        publishBtn.hidden = false;
+        updatePublishSummary();
+    } else { 
+        nextBtn.hidden = false; 
+        publishBtn.hidden = true; 
+    }
+
     backBtn.disabled = n === 1;
+    
+    // Update steps UI
+    wizardSteps.forEach(s => {
+        const stepNum = Number(s.dataset.step);
+        s.classList.toggle('active', stepNum === n);
+        s.classList.toggle('completed', stepNum < n);
+    });
+
+    // Show/Hide panels with animation
+    wizardPanels.forEach(p => {
+        const isCurrent = Number(p.dataset.step) === n;
+        p.hidden = !isCurrent;
+        if (isCurrent) {
+            p.style.opacity = '0';
+            p.style.transform = 'translateY(10px)';
+            setTimeout(() => {
+                p.style.transition = 'all 0.4s ease-out';
+                p.style.opacity = '1';
+                p.style.transform = 'translateY(0)';
+            }, 10);
+        }
+    });
+
     currentStep = n;
-    wizardSteps.forEach(s => s.classList.toggle('active', Number(s.dataset.step) === n));
-    wizardPanels.forEach(p => p.hidden = Number(p.dataset.step) !== n);
 }
+
+function updatePublishSummary() {
+    const title = document.getElementById('video-title')?.value || 'Untitled';
+    const tags = Array.from(tagsGrid.querySelectorAll('input[type="checkbox"]:checked'))
+        .map(c => c.parentElement.textContent.trim())
+        .join(', ');
+    
+    const summaryDiv = document.getElementById('publish-summary');
+    if (summaryDiv) {
+        summaryDiv.innerHTML = `
+            <div style="background: var(--neutral-50); padding: 1.5rem; border-radius: 1rem; border: 1px solid var(--neutral-200); margin-bottom: 1rem;">
+                <p style="font-weight: 600; color: var(--neutral-900); margin-bottom: 0.5rem;">Title: <span style="font-weight: 400; color: var(--neutral-600);">${title}</span></p>
+                <p style="font-weight: 600; color: var(--neutral-900);">Materials: <span style="font-weight: 400; color: var(--neutral-600);">${tags}</span></p>
+            </div>
+            <p style="text-align: center; font-size: 0.875rem; color: var(--primary-600);">Ready to share with the community!</p>
+        `;
+    }
+}
+
 async function publishWizard() {
-    const title = document.getElementById('video-title') ? document.getElementById('video-title').value.trim() : '';
-    const desc = document.getElementById('video-desc') ? document.getElementById('video-desc').value.trim() : '';
+    const title = document.getElementById('video-title')?.value.trim();
+    const desc = document.getElementById('video-desc')?.value.trim();
     const tags = Array.from(tagsGrid ? tagsGrid.querySelectorAll('input[type="checkbox"]:checked') : []).map(c => c.value);
-    if (!currentFile || !title || tags.length === 0) { alert('Please fill in all fields and upload a video.'); return; }
-    const originalBtnText = publishBtn.textContent;
-    publishBtn.textContent = 'Uploading... ⏳';
+
+    if (!currentFile || !title || tags.length === 0) {
+        alert('Please fill in all fields and upload a video.');
+        return;
+    }
+
+    const originalBtnText = publishBtn.innerHTML;
+    publishBtn.innerHTML = '<span class="loader" style="width: 1.2rem; height: 1.2rem; border-width: 2px; margin-right: 0.5rem;"></span> Publishing...';
     publishBtn.disabled = true;
+
     try {
-        await uploadToCloudinary(currentFile, { title, description: desc, tags });
-        alert('Published Successfully! 🎉 Your video is now live.');
-        document.getElementById('tutorial-form').reset();
-        if(document.getElementById('video-title')) document.getElementById('video-title').value = '';
-        if(document.getElementById('video-desc')) document.getElementById('video-desc').value = '';
-        if(tagsGrid) tagsGrid.querySelectorAll('input').forEach(i => i.checked = false);
-        currentFile = null;
-        if (previewWrap) previewWrap.hidden = true;
-        if (dropzone) { dropzone.classList.remove('active'); dropzone.querySelector('.dropzone-inner').hidden = false; }
-        goStep(1);
+        // 1. Get Signature from our backend
+        const sigResponse = await fetch(`${API_BASE}/get-signature`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+                title, 
+                description: desc, 
+                tags: tags.join(',') 
+            })
+        });
+
+        if (!sigResponse.ok) throw new Error('Failed to get upload signature');
+        const sigData = await sigResponse.json();
+
+        // 2. Upload to Cloudinary directly
+        const formData = new FormData();
+        formData.append('file', currentFile);
+        formData.append('api_key', sigData.api_key);
+        formData.append('timestamp', sigData.timestamp);
+        formData.append('signature', sigData.signature);
+        formData.append('folder', sigData.folder);
+        formData.append('tags', sigData.tags);
+        formData.append('context', sigData.context);
+
+        const uploadResponse = await fetch(`https://api.cloudinary.com/v1_1/${sigData.cloud_name}/video/upload`, {
+            method: 'POST',
+            body: formData
+        });
+
+        if (!uploadResponse.ok) {
+            const errorData = await uploadResponse.json();
+            throw new Error(errorData.error?.message || 'Upload to Cloudinary failed');
+        }
+
+        // Success state
+        const wizardBody = document.querySelector('.wizard-body');
+        wizardBody.innerHTML = `
+            <div class="status-success" style="text-align: center; padding: 4rem 2rem; animation: scaleIn 0.5s ease-out;">
+                <div style="font-size: 5rem; margin-bottom: 2rem;">🎉</div>
+                <h2 style="color: var(--primary-700); margin-bottom: 1rem;">Tutorial Published!</h2>
+                <p style="color: var(--neutral-600); margin-bottom: 2rem; max-width: 400px; margin-left: auto; margin-right: auto;">
+                    Your recycling tutorial has been successfully uploaded and shared with the community.
+                </p>
+                <div class="flex gap-4 justify-center">
+                    <button onclick="location.reload()" class="cta-button">Upload Another</button>
+                    <a href="/community/search/" class="secondary-button">Browse Tutorials</a>
+                </div>
+            </div>
+        `;
     } catch (error) {
-        console.error('Upload failed:', error);
-        alert('Upload failed: ' + error.message);
-    } finally {
-        publishBtn.textContent = originalBtnText;
+        console.error('Publishing failed:', error);
+        alert(`Failed to publish: ${error.message}`);
+        publishBtn.innerHTML = originalBtnText;
         publishBtn.disabled = false;
     }
 }

@@ -6,44 +6,31 @@
   <title>Recycle-it | YouTube Search</title>
   <meta name="description" content="Find YouTube recycling tutorials by selecting items. Serverless proxy for fast, reliable search.">
   <meta name="keywords" content="YouTube recycling, search tutorials, items, upcycling, DIY">
-  <meta name="theme-color" content="#27ae60">
+  <meta name="theme-color" content="#0f766e">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/YTsearch/style.css">
-  <style>
-    html, body { height: 100%; }
-    body { display: flex; flex-direction: column; min-height: 100vh; }
-    main { flex: 1; }
-    footer { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:1rem 0; margin-top:2rem; width:100%; }
-    footer p { margin:.25rem 0; }
-  </style>
 </head>
-<body class="bg-slate-50">
-  <style>
-    .glass-nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,.7);border-bottom:1px solid rgba(15,23,42,.08);transition:background .25s ease,box-shadow .25s ease}
-    .glass-nav .container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;min-height:64px}
-    .glass-nav .links{display:flex;gap:1rem}
-    .glass-nav .links a{text-decoration:none;padding:8px 14px;border-radius:999px;color:#0f172a}
-    .glass-nav .links a:hover{background:rgba(15,23,42,.06)}
-    .glass-nav.scrolled{box-shadow:0 10px 30px rgba(0,0,0,.08)}
-  </style>
-  <header class="glass-nav">
-    <div class="container">
-      <div class="logo text-brand font-semibold text-lg">Recycle-it ♻️</div>
-      <div class="links">
-        <a href="/">Home</a>
-        <a href="search/">Search</a>
-      </div>
+<body class="bg-neutral-50">
+  <header class="navbar">
+    <div class="logo">
+        <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary-600), var(--primary-700)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1rem;">♻️</div>
+        <span>Recycle-it</span>
+    </div>
+    <div class="nav-links">
+      <a href="/">Home</a>
+      <a href="/community/">Community</a>
+      <a href="search/">Search</a>
     </div>
   </header>
   <header class="hero">
     <div class="hero-content max-w-6xl mx-auto px-6 text-center">
-      <h1 class="text-4xl md:text-5xl font-bold">YouTube Tutorials by Items</h1>
-      <p class="subtitle mt-3 text-white/90">Find recycling tutorials from YouTube by selecting your items.</p>
-      <a href="search/" class="cta-button mt-6">Start Searching</a>
+      <h1 class="font-display">YouTube Tutorials by Items</h1>
+      <p class="subtitle mt-3">Find recycling tutorials from YouTube by selecting your items.</p>
+      <a href="search/" class="cta-button mt-8">Start Searching</a>
     </div>
   </header>
   <footer>
@@ -51,7 +38,7 @@
     <p>Making the world greener, one item at a time.</p>
   </footer>
   <script>
-    const nv=document.querySelector('.glass-nav');window.addEventListener('scroll',()=>{const y=window.scrollY;if(y>8){nv.classList.add('scrolled')}else{nv.classList.remove('scrolled')}})
+    const nv=document.querySelector('.navbar');window.addEventListener('scroll',()=>{const y=window.scrollY;if(y>8){nv.classList.add('scrolled')}else{nv.classList.remove('scrolled')}})
   </script>
 </body>
 </html>
