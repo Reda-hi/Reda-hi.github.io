@@ -20,7 +20,8 @@ function plainResponse(status, body) {
 
 function getRequiredEnv(env, key) {
   const value = env[key];
-  if (!value) {
+  const normalized = typeof value === "string" ? value.trim() : value;
+  if (!normalized || normalized === "CHANGE_ME" || normalized === "REPLACE_ME") {
     throw new Error(`Missing ${key} configuration`);
   }
   return value;
