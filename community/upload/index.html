@@ -17,7 +17,7 @@
 <body class="bg-slate-50">
     <style>
         .glass-nav{position:sticky;top:0;z-index:50;backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);background:rgba(255,255,255,.7);border-bottom:1px solid rgba(15,23,42,.08);transition:background .25s ease,box-shadow .25s ease}
-        .glass-nav .container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;height:64px}
+        .glass-nav .container{max-width:1200px;margin:0 auto;padding:0 24px;display:flex;justify-content:space-between;align-items:center;min-height:64px}
         .glass-nav .links{display:flex;gap:1rem}
         .glass-nav .links a{text-decoration:none;padding:8px 14px;border-radius:999px;color:#0f172a}
         .glass-nav .links a:hover{background:rgba(15,23,42,.06)}
@@ -27,6 +27,7 @@
         <div class="container">
             <div class="logo text-brand font-semibold text-lg">Recycle-it ♻️</div>
             <div class="links">
+                <a href="/">Home</a>
                 <a href="../search/">Search</a>
                 <a href="../upload/">Upload</a>
             </div>
@@ -64,7 +65,7 @@
                             </div>
                         </div>
                         <div id="preview" class="preview" hidden>
-                            <video id="preview-video" controls></video>
+                            <video id="preview-video" controls style="aspect-ratio:16/9; width:100%; max-width:640px;"></video>
                         </div>
                     </div>
                     <div class="wizard-panel" data-step="2" hidden>
@@ -85,13 +86,7 @@
                         <div class="summary">
                             <h3>Ready to publish</h3>
                             <p>Review your info and press Publish.</p>
-                            <div class="storage-actions">
-                                <button id="export-library" type="button" class="cta-button">Export Library</button>
-                                <label class="cta-button" style="cursor:pointer;">
-                                    Import Library
-                                    <input id="import-library" type="file" accept="application/json" hidden>
-                                </label>
-                            </div>
+
                         </div>
                     </div>
                 </div>
