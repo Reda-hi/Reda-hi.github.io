@@ -83,6 +83,7 @@ body {
     font-weight: 400;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
 }
 
 /* Professional Headings */
@@ -110,6 +111,7 @@ h6 { font-size: 1.125rem; }
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 1rem;
     position: sticky;
     top: 0;
     z-index: 1000;
@@ -132,14 +134,21 @@ h6 { font-size: 1.125rem; }
     font-family: 'Lexend', sans-serif;
 }
 
+.nav-links {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.35rem;
+    flex-wrap: wrap;
+}
+
 .nav-links a { 
     text-decoration: none; 
     color: var(--neutral-600); 
-    margin-left: 2rem; 
     font-weight: 500; 
     transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
+    padding: 0.65rem 0.9rem;
+    border-radius: 999px;
     position: relative;
 }
 
@@ -162,6 +171,45 @@ h6 { font-size: 1.125rem; }
 
 .nav-links a:hover::after {
     width: 80%;
+}
+
+.card-pro {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(15, 118, 110, 0.12);
+    box-shadow: var(--shadow-lg);
+    backdrop-filter: blur(10px);
+}
+
+.hover-lift {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.hover-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--shadow-xl);
+}
+
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.9rem 1.25rem;
+    background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+    color: white;
+    border-radius: 999px;
+    font-weight: 600;
+    box-shadow: var(--shadow-md);
+    text-decoration: none;
+}
+
+.focus-ring:focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.2);
+}
+
+.transition-pro {
+    transition: all 0.2s ease;
 }
 
 /* Professional Hero Section */
@@ -718,14 +766,14 @@ footer p {
 /* Responsive Design */
 @media (max-width: 768px) {
     .hero { padding: 4rem 1rem 3rem; }
-    .hero h1 { font-size: 2.5rem; }
-    .hero p { font-size: 1.1rem; }
+    .hero h1 { font-size: 2.25rem; line-height: 1.1; }
+    .hero p { font-size: 1rem; }
     
-    .container { padding: 0 1rem; }
+    .container { padding: 0 1rem 2rem; }
     
     .items-grid {
-        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-        gap: 1rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 0.85rem;
     }
     
     .wizard-steps {
@@ -734,17 +782,38 @@ footer p {
     }
     
     .wizard, .tutorial-form, .action-area {
-        padding: 2rem 1.5rem;
-        border-radius: 1.5rem;
+        padding: 1.5rem 1rem;
+        border-radius: 1.25rem;
     }
     
     .navbar {
-        padding: 1rem;
+        padding: 0.9rem 1rem;
+        flex-wrap: wrap;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: flex-start;
+        padding-top: 0.25rem;
     }
     
     .nav-links a {
-        margin-left: 1rem;
-        padding: 0.5rem;
+        padding: 0.6rem 0.8rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .items-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .cta-button, .secondary-button, .btn-primary {
+        width: 100%;
+        justify-content: center;
     }
 }
 
