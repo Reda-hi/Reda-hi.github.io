@@ -89,20 +89,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Lexend:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/community/style.css">
   <style>
-    /* Home-specific enhancements */
-    .hero-home {
-      background: none !important;
-      color: inherit !important;
-    }
     .text-gradient {
-      background: linear-gradient(135deg, var(--primary-700), var(--primary-500), var(--secondary-500));
+      background: linear-gradient(135deg, #2f6a4f 0%, #4e9b74 45%, #c28d34 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
+    .soft-pill {
+      border: 1px solid rgba(47, 106, 79, 0.16);
+      background: rgba(255, 255, 255, 0.82);
+      box-shadow: 0 12px 30px -18px rgba(47, 106, 79, 0.35);
+      backdrop-filter: blur(10px);
+    }
+    .feature-panel {
+      position: relative;
+      overflow: hidden;
+      border-radius: 1.75rem;
+      border: 1px solid rgba(47, 106, 79, 0.12);
+      background: linear-gradient(135deg, rgba(255,255,255,0.95), rgba(248, 244, 234, 0.95));
+      box-shadow: 0 20px 45px -24px rgba(47, 106, 79, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .feature-panel::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(130deg, rgba(78, 155, 116, 0.10), transparent 55%, rgba(194, 141, 52, 0.10));
+      pointer-events: none;
+    }
+    .feature-panel:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 50px -24px rgba(47, 106, 79, 0.4);
+    }
+    .feature-panel > * {
+      position: relative;
+      z-index: 1;
+    }
   </style>
 </head>
-<body class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(78,155,116,0.12),_transparent_38%),linear-gradient(135deg,_#f7f2e8_0%,_#f4f8f2_45%,_#f7efe0_100%)] font-sans">
+<body class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(78,155,116,0.14),_transparent_35%),radial-gradient(circle_at_bottom_right,_rgba(194,141,52,0.12),_transparent_30%),linear-gradient(135deg,_#f8f2e8_0%,_#f4f8f2_48%,_#f6efe2_100%)] font-sans">
   <header class="navbar">
     <div class="logo">
       <div style="width: 32px; height: 32px; background: linear-gradient(135deg, var(--primary-600), var(--primary-700)); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 1rem;">♻️</div>
@@ -115,101 +140,74 @@
   </header>
 
   <!-- Hero Section -->
-  <section class="pt-16 pb-16 sm:pt-20 sm:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
-    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at top left, rgba(78, 155, 116, 0.12), transparent 40%), radial-gradient(circle at bottom right, rgba(194, 141, 52, 0.1), transparent 32%);"></div>
+  <section class="pt-10 pb-16 sm:pt-14 sm:pb-20 px-4 sm:px-6 lg:px-8 relative overflow-hidden">
+    <div class="absolute inset-0 pointer-events-none" style="background: radial-gradient(circle at top left, rgba(78,155,116,0.16), transparent 36%), radial-gradient(circle at bottom right, rgba(194,141,52,0.14), transparent 34%);"></div>
 
     <div class="max-w-7xl mx-auto relative z-10">
-      <div class="text-center mb-10 md:mb-14 animate-fade-in">
-        <div class="inline-flex items-center gap-2 rounded-full border border-primary-200 bg-white/85 px-3 py-2 text-sm font-medium text-primary-700 shadow-sm mb-6">
-          <span class="inline-block h-2.5 w-2.5 rounded-full bg-primary-500"></span>
-          Reuse ideas, discover tutorials, share what works
+      <div class="grid gap-8 lg:grid-cols-[1.1fr_0.9fr] items-center">
+        <div class="animate-fade-in rounded-[32px] border border-white/70 bg-white/75 p-8 sm:p-10 lg:p-12 shadow-[0_30px_70px_-35px_rgba(47,106,79,0.35)] backdrop-blur-xl">
+          <div class="soft-pill inline-flex items-center gap-2 rounded-full px-3 py-2 text-sm font-medium text-primary-700">
+            <span class="inline-block h-2.5 w-2.5 rounded-full bg-primary-500"></span>
+            Reuse ideas, discover tutorials, share what works
+          </div>
+          <h1 class="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-gradient mt-6 leading-tight">
+            Turn Waste into Wonder
+          </h1>
+          <p class="mt-5 text-lg sm:text-xl text-neutral-600 leading-relaxed max-w-2xl">
+            Discover bold upcycling ideas, browse community tutorials, and turn everyday materials into something meaningful.
+          </p>
+          <div class="mt-8 flex flex-col sm:flex-row gap-3">
+            <a href="/community/" class="btn-primary w-full sm:w-auto justify-center px-6 py-3 rounded-full">
+              Explore Community
+            </a>
+            <a href="/YTsearch/" class="secondary-button w-full sm:w-auto justify-center px-6 py-3 rounded-full">
+              Search YouTube
+            </a>
+          </div>
+          <div class="mt-8 flex flex-wrap gap-2">
+            <span class="rounded-full bg-primary-50 px-3 py-1 text-sm font-medium text-primary-700">Community-led</span>
+            <span class="rounded-full bg-secondary-50 px-3 py-1 text-sm font-medium text-secondary-700">Creative reuse</span>
+            <span class="rounded-full bg-neutral-100 px-3 py-1 text-sm font-medium text-neutral-700">Built for curious minds</span>
+          </div>
         </div>
-        <h1 class="font-display text-4xl sm:text-5xl lg:text-7xl font-bold text-gradient mb-4 sm:mb-6 leading-tight">
-          Turn Waste into Wonder
-        </h1>
-        <p class="text-lg sm:text-xl md:text-2xl text-neutral-600 max-w-3xl mx-auto leading-relaxed px-2">
-          Find creative recycling projects, explore inspiring tutorials, and build a greener habit with every click.
-        </p>
+
+        <div class="grid gap-4">
+          <div class="feature-panel p-6 sm:p-7">
+            <div class="flex items-center justify-between">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-500 to-primary-600 text-xl text-white shadow-lg">♻️</div>
+              <span class="rounded-full bg-primary-50 px-3 py-1 text-sm font-semibold text-primary-700">Featured</span>
+            </div>
+            <h3 class="mt-5 font-display text-2xl font-semibold text-neutral-900">Reinvent everyday materials</h3>
+            <p class="mt-2 text-sm sm:text-base text-neutral-600 leading-relaxed">
+              Turn bottles, cardboard, old fabric, and scraps into practical pieces with ideas people actually use.
+            </p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div class="feature-panel p-5">
+              <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-secondary-400 to-secondary-500 text-white">🎥</div>
+              <h4 class="mt-4 font-semibold text-neutral-900">Video-first ideas</h4>
+              <p class="mt-2 text-sm text-neutral-600">Watch, learn, and copy the process in minutes.</p>
+            </div>
+            <div class="feature-panel p-5">
+              <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-400 to-primary-500 text-white">🌿</div>
+              <h4 class="mt-4 font-semibold text-neutral-900">Small impact, big change</h4>
+              <p class="mt-2 text-sm text-neutral-600">Every project inspires one more reuse habit.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="grid gap-6 lg:grid-cols-2 max-w-5xl mx-auto">
-        <a href="/community/" class="card-pro rounded-[28px] p-6 sm:p-8 hover-lift group border border-emerald-100/80 bg-white/85 shadow-[0_18px_45px_-20px_rgba(47,106,79,0.35)]">
-          <div class="flex items-start justify-between mb-6">
-            <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-primary-500 to-primary-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-              </svg>
-            </div>
-            <div class="text-primary-600 group-hover:translate-x-1 transition-transform">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </div>
-          </div>
-
-          <h3 class="font-display text-xl sm:text-2xl font-semibold text-neutral-900 mb-3">Community Hub</h3>
-          <p class="text-neutral-600 mb-6 leading-relaxed">
-            Upload tutorials, discover shared projects, and connect with eco-conscious creators in one friendly space.
-          </p>
-
-          <div class="flex flex-wrap gap-2 mb-6">
-            <span class="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">Upload videos</span>
-            <span class="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">Tag materials</span>
-            <span class="px-3 py-1 bg-primary-100 text-primary-700 rounded-full text-sm font-medium">Browse ideas</span>
-          </div>
-
-          <div class="btn-primary w-full justify-center sm:w-auto px-6 py-3 rounded-xl font-semibold text-white focus-ring">
-            <span>Explore Community</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-            </svg>
-          </div>
-        </a>
-
-        <a href="/YTsearch/" class="card-pro rounded-[28px] p-6 sm:p-8 hover-lift group border border-amber-100/80 bg-[#fffaf1]/90 shadow-[0_18px_45px_-20px_rgba(194,141,52,0.35)]">
-          <div class="flex items-start justify-between mb-6">
-            <div class="w-14 h-14 sm:w-16 sm:h-16 bg-gradient-to-br from-secondary-500 to-secondary-600 rounded-2xl flex items-center justify-center shadow-lg">
-              <svg class="w-7 h-7 sm:w-8 sm:h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-              </svg>
-            </div>
-            <div class="text-secondary-600 group-hover:translate-x-1 transition-transform">
-              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-              </svg>
-            </div>
-          </div>
-
-          <h3 class="font-display text-xl sm:text-2xl font-semibold text-neutral-900 mb-3">YouTube Search</h3>
-          <p class="text-neutral-600 mb-6 leading-relaxed">
-            Search through YouTube tutorials with a smarter experience designed to help you find the right project fast.
-          </p>
-
-          <div class="flex flex-wrap gap-2 mb-6">
-            <span class="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm font-medium">Smart search</span>
-            <span class="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm font-medium">Quick filters</span>
-            <span class="px-3 py-1 bg-secondary-100 text-secondary-700 rounded-full text-sm font-medium">Fast results</span>
-          </div>
-
-          <div class="btn-primary w-full justify-center sm:w-auto px-6 py-3 rounded-xl font-semibold text-white focus-ring">
-            <span>Start Searching</span>
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-            </svg>
-          </div>
-        </a>
-      </div>
-
-      <div class="mt-10 grid gap-4 md:grid-cols-3 max-w-5xl mx-auto">
-        <div class="rounded-2xl border border-primary-100 bg-[#fdf8ef]/95 p-4 text-left shadow-sm backdrop-blur">
+      <div class="mt-10 grid gap-4 lg:grid-cols-3">
+        <div class="rounded-[24px] border border-primary-100 bg-[#fdf8ef]/95 p-5 shadow-sm backdrop-blur">
           <p class="font-semibold text-neutral-900">Built for learning</p>
-          <p class="text-sm text-neutral-600 mt-1">Clear steps and simple navigation make inspiration easy to follow.</p>
+          <p class="text-sm text-neutral-600 mt-1">Clear steps and thoughtful structure make ideas easy to follow.</p>
         </div>
-        <div class="rounded-2xl border border-primary-100 bg-[#fdf8ef]/95 p-4 text-left shadow-sm backdrop-blur">
+        <div class="rounded-[24px] border border-primary-100 bg-[#fdf8ef]/95 p-5 shadow-sm backdrop-blur">
           <p class="font-semibold text-neutral-900">Easy to explore</p>
-          <p class="text-sm text-neutral-600 mt-1">Move between community ideas and YouTube inspiration in just a few taps.</p>
+          <p class="text-sm text-neutral-600 mt-1">Move between community inspiration and YouTube tutorials in just a few taps.</p>
         </div>
-        <div class="rounded-2xl border border-primary-100 bg-[#fdf8ef]/95 p-4 text-left shadow-sm backdrop-blur">
+        <div class="rounded-[24px] border border-primary-100 bg-[#fdf8ef]/95 p-5 shadow-sm backdrop-blur">
           <p class="font-semibold text-neutral-900">Made to share</p>
           <p class="text-sm text-neutral-600 mt-1">Your tutorials can be discovered by the whole community.</p>
         </div>

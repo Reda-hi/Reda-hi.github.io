@@ -76,7 +76,7 @@ body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     line-height: 1.6;
     color: var(--text-color);
-    background: linear-gradient(135deg, #f7fcf8 0%, #f3efe7 100%);
+    background: linear-gradient(135deg, #f8f2e8 0%, #f6f8ef 46%, #f1f7f2 100%);
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -270,22 +270,22 @@ h6 { font-size: 1.125rem; }
 
 /* Professional Cards */
 .item-card { 
-    background: var(--card-bg);
-    border-radius: 1rem;
+    background: linear-gradient(135deg, rgba(255,255,255,0.96), rgba(248,244,234,0.96));
+    border-radius: 1.35rem;
     padding: 2rem 1.5rem;
     text-align: center;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 2px solid transparent;
-    box-shadow: var(--shadow-sm);
+    transition: all 0.25s ease;
+    border: 1px solid rgba(47, 106, 79, 0.12);
+    box-shadow: 0 16px 35px -24px rgba(47, 106, 79, 0.35);
     position: relative;
     overflow: hidden;
     backdrop-filter: blur(10px);
 }
 
 .item-card:hover { 
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: var(--shadow-xl);
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px -20px rgba(47, 106, 79, 0.45);
     border-color: var(--primary-200);
 }
 
